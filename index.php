@@ -7,6 +7,6 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Production website</h1>
+    <h1>Staging website</h1>
 </body>
 </html>
