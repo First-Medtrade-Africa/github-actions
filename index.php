@@ -1,13 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Staging website</h1>
-    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Neque a itaque incidunt labore consequuntur odio qui, architecto ut ducimus. Ab, dignissimos. Nisi neque vero doloremque dignissimos repudiandae accusantium veniam totam.</p>
-</body>
-</html>
+<?php
+require_once 'core/init.php';
+include_once ('./includes/header.php');
+include_once ('./includes/sidbar.php');
+?>
+
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+
+        <!-- Main Content -->
+        <div id="content">
+
+            <!-- Topbar -->
+            <?php include_once ('./includes/topNavbar.php')?>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <!-- Page Heading -->
+
+            </div>
+            <!-- /.container-fluid -->
+
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <?php include_once ('./includes/stickyfooter.php')?>
+        <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+
+
+
+<?php
+include_once ('./includes/footer.php');
+?>
