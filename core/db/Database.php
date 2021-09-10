@@ -10,6 +10,7 @@ class Database
 
     public function __construct($dbConfig = [])
     {
+        date_default_timezone_set('Africa/Lagos');
         $dbDsn = $dbConfig['dsn'] ?? '';
         $username = $dbConfig['user'] ?? '';
         $password = $dbConfig['password'] ?? '';

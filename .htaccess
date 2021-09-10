@@ -2,7 +2,6 @@
 # That was ONLY to protect you from 500 errors
 # if your server did not have mod_rewrite enabled
 # Use PHP7 as default
-AddHandler application/x-httpd-php70 .php
 
 RewriteEngine On
 # RewriteBase /
