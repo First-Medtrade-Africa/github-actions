@@ -23,7 +23,7 @@
                 <i class="fas fa-shopping-cart"></i>
             </span>
             <div class="info-box-content">
-                <span class="info-box-text">Sales This <?= date('l', );?></span>
+                <span class="info-box-text">Sales This <?php echo date('l',strtotime(date("Y/m/d")));?></span>
                 <span class="info-box-number"><?=$todaySales?></span>
             </div>
         </div>
@@ -35,7 +35,7 @@
                 <i class="fas fa-shopping-cart"></i>
             </span>
             <div class="info-box-content">
-                <span class="info-box-text">Sales This <?=date("F");?></span>
+                <span class="info-box-text">Sales This <?php echo date('F',strtotime(date("Y/m/d")));?></span>
                 <span class="info-box-number"><?=$monthlySales ?></span>
             </div>
         </div>
@@ -47,7 +47,7 @@
                 <i class="fas fa-shopping-cart"></i>
             </span>
             <div class="info-box-content">
-                <span class="info-box-text"><?=date("Y");?> Sales</span>
+                <span class="info-box-text"><?php echo date('Y',strtotime(date("Y/m/d")));?> Sales</span>
                 <span class="info-box-number"><?=$annualEarnings ?></span>
             </div>
         </div>
