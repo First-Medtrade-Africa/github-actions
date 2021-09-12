@@ -23,8 +23,8 @@ class Application
 
     
     public static $app;
-    public static string $ROOT_DIR;
-    public static tring $userClass;
+    public static  $ROOT_DIR;
+    public static  $userClass;
     public string $layout = 'err';
     public Router $router;
     public Request $request;
