@@ -22,9 +22,9 @@ class Application
     const EVENT_AFTER_REQUEST = 'afterRequest';
 
     
-    public static $app;
-    public static  $ROOT_DIR;
-    public static  $userClass;
+    public static Application $app;
+    public static string $ROOT_DIR;
+    public static string $userClass;
     public string $layout = 'err';
     public Router $router;
     public Request $request;
@@ -34,7 +34,7 @@ class Application
     public Session $session;
     public View $view;
     public ?UserModel $user;
-    protected $eventListeners = [];
+    protected array $eventListeners = [];
 
 
     public function __construct($rootDir, $config)
