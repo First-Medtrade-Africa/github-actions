@@ -22,7 +22,7 @@ class Application
     const EVENT_AFTER_REQUEST = 'afterRequest';
 
     
-    public static Application $app;
+    public static $app;
     public static string $ROOT_DIR;
     public static tring $userClass;
     public string $layout = 'err';
