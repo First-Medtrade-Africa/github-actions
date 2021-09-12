@@ -41,6 +41,8 @@ class HomeController extends Controller
         $statement->execute([$user]);
         if ($statement->rowCount() > 0){
             $res = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        }else {
+            $res = [];
         }
         return $res ;
     }
