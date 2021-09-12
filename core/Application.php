@@ -21,8 +21,7 @@ class Application
     const EVENT_BEFORE_REQUEST = 'beforeRequest';
     const EVENT_AFTER_REQUEST = 'afterRequest';
 
-    protected array $eventListeners = [];
-
+    
     public static Application $app;
     public static string $ROOT_DIR;
     public static tring $userClass;
@@ -35,6 +34,7 @@ class Application
     public Session $session;
     public View $view;
     public ?UserModel $user;
+    protected $eventListeners = [];
 
 
     public function __construct($rootDir, $config)
