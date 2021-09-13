@@ -30,7 +30,7 @@ class UserController extends Controller
 
     public function getSeller()
     {
-        $sql = "SELECT `users`.*,`vendors`.`storeName`,`vendors`.`approved` FROM `users` JOIN `vendors` WHERE role='seller' AND users.isDeleted = 0 AND `vendors`.`user_id` = `users`.`id`";
+        $sql = "SELECT `users`.*,`vendors`.`storeName`,`vendors`.`approved` FROM `users` JOIN `vendors` WHERE role='retailer' AND vendors.isDeleted = 0 AND vendors.user_id = users.id";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
