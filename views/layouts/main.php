@@ -640,8 +640,9 @@ $first_part = $components[1];
                     $.each(data, function (i, val) {
                         var status = val.orderStatus
                         var badge = ''
+                        var currency = ''
                         switch (status) {
-                            case 'Pending Confirmation':
+                            case 'Awaiting Confirmation':
                                 badge = 'badge-secondary';
                                 break;
                             case 'Order Placed':
@@ -657,6 +658,11 @@ $first_part = $components[1];
                                 badge = 'badge-success';
                                 break;
                         }
+                        if(val.productPriceCurr === "USD"){
+                            currency = "$"
+                        }else{
+                            currency = "₦"
+                        }
                         $('#ordertable').append('<tr>' +
                             '<td>' + val.orderId + '</td>' +
                             '<td>' + val.orderDate + '</td>' +
@@ -664,7 +670,7 @@ $first_part = $components[1];
                             '<td>' +
                                 val.name +
                             '</td>' +
-                            '<td>&#8358; ' + Number((val.price)).toLocaleString() + '</td>' +
+                            '<td>' + currency + Number((val.price)).toLocaleString() + '</td>' +
                             '<td></td>' +
                             '<td><a href="" data-toggle="modal" data-target="#status" data-stats="'+ val.orderStatus +'" data-statid="'+ val.id +'" class="stats badge ' + badge + '">' + val.orderStatus + '</a></td>' +
                             '<td>' +
