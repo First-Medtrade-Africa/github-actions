@@ -123,11 +123,12 @@ class SalesController extends Controller
             $internationalMarkup = $value['markup_value'];
         }
     
-        $totalDailyOrders = count($this->getSalesToday());
-        $totalDailyOrdersValue = $this->getSalesToday();
-        $totalMonthOrders = count($this->getSalesMonth());
-        $totalMonthlyOrdersValue = $this->getSalesMonth();
+        $totalDailyOrders  = count($this->getSalesToday());
+        $totalMonthOrders  = count($this->getSalesMonth());
         $totalAnnualOrders = count($this->getSalesYear());
+        $totalDailyOrdersValue   = $this->getSalesToday();
+        $totalMonthlyOrdersValue = $this->getSalesMonth();
+        $totalAnnualOrdersValue  = $this->getSalesYear();
         $totalAnnualSales = 0;
         $totalAnnualSales2 = 0;
 
@@ -156,6 +157,8 @@ class SalesController extends Controller
         $totalDailyValueNgn = '';
         $totalMonthlyValueUsd = '';
         $totalMonthlyValueNgn = '';
+        $totalYearlyValueUsd = '';
+        $totalYearlyValueNgn = '';
 
         if(empty($totalDailyOrdersValue)) {
             foreach ($totalDailyOrdersValue as $key => $value) {
@@ -185,6 +188,20 @@ class SalesController extends Controller
             $totalMonthlySalesValue = 0;
         }
 
+        if(empty($totalAnnualOrdersValue)) {
+            foreach ($totalAnnualOrdersValue as $key => $value) {
+                if ($value['productPriceCurr'] == 'NGN') {
+                    $totalYearlyValueNgn += $this->useMarkup((int)$value['productPrice'], $domesticMarkup);
+                } else {
+                    $totalYearlyValueUsd += $this->useMarkup((int)$value['productPrice'], $internationalMarkup);
+                }
+            }
+            $totalYearlySalesValue = (int)$totalMonthlyValueNgn +((int)$totalMonthlyValueUsd*(int)$exhancheRate);
+        }
+        else{
+            $totalYearlySalesValue = 0;
+        }
+
 //        $totalMonthlySalesValueConverted = $totalMonthlyValueNgn +($totalMonthlyValueUsd*(int)$exhancheRate);
 
         $totalPriceConverted = $totalNgnprice + ($totalUsdprice*(int)$exhancheRate);
@@ -211,6 +228,7 @@ class SalesController extends Controller
             'monthlySalesValue'=> $totalMonthlySalesValue,
             'tds'=>$totalDailyOrdersValue,
             'tmo'=>$this->getSalesMonth(),
+            'annualsalesValue'=>$totalYearlySalesValue
         ]);
     }
 
