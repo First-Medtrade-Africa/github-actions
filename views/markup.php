@@ -85,7 +85,7 @@
 </div>
 <div class="row">
     <div class="modal" id="editexchange">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title">Default Modal</h4>
@@ -94,7 +94,38 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
+                    <form action="" id="EditExchangeRate">
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">Buy Currency</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="ebuy" class="form-control buycurrency">
+                                <input type="text" name="exchange_id" class="form-control ex_id " hidden>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">Sell Currency</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="esell" class="form-control sellcurrency">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">Rate</label>
+                            <div class="col-sm-8">
+                                <input type="number" name="erate" class="form-control rate">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">Inverse Rate</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="einverse"  class="form-control inverserate" >
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <button type="submit" class="btn btn-success btn-primary float-right">Edit Rate</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

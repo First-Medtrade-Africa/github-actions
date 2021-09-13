@@ -1798,6 +1798,22 @@ $first_part = $components[1];
                 }
             })
         }
+        function getExchangeById(id){
+            $('.markupInput').val('');
+            $.ajax({
+                url:'/markup?getexchangebyid='+id,
+                type: 'POST',
+                success: function (result) {
+                    var data =JSON.parse(result)
+                    console.log(data[0].markup_value)
+                    $('.ex_id').val(data[0].id);
+                    $('.buycurrency').val(data[0].currency);
+                    $('.sellcurrency').val(data[0].x_currency);
+                    $('.rate').val(data[0].rate);
+                    $('.inverserate').val(data[0].inverse_rate);
+                }
+            })
+        }
 
         function updateMarkup(data) {
             $.ajax({
@@ -1832,7 +1848,7 @@ $first_part = $components[1];
                             '<td>'+val.x_currency+'</td>' +
                             '<td>'+val.rate+'</td>' +
                             '<td>'+val.inverse_rate+'</td>' +
-                            '<td> <button class="btn btn-success btn-xs editexchangebtn" id="" data-toggle="modal" data-id="' + val.markup_id + '"  data-target="#editexchange">Edit</button></td>' +
+                            '<td> <button class="btn btn-success btn-xs editexchangebtn" id="" data-toggle="modal" data-id="' + val.id + '"  data-target="#editexchange">Edit</button></td>' +
                             '')
                     })
                 }
@@ -1848,10 +1864,33 @@ $first_part = $components[1];
                 }
             })
         }
+        function editCurrency(data){
+            $.ajax({
+                url:'/markup?'+data,
+                type:'POST',
+                success:function (res) {
+                    $("#editexchange").modal('hide');
+                    Swal.fire(
+                        'Exchange Rate Updated!',
+                        'Your Exchange Rate has been Updated Successfully.',
+                        'success'
+                    )
+                    setTimeout(function() {
+                        // Do something after 5 seconds
+                        getExchange();
+                    }, 500);
+                }
+            })
+        }
         $(document.body).on('click','.editmarkupbtn',function () {
             var id = $(this).data('id');
             console.log(id)
             getMarkupById(id)
+        })
+        $(document.body).on('click','.editexchangebtn',function () {
+            var id = $(this).data('id');
+            console.log(id)
+            getExchangeById(id)
         })
 
         $('#markupForm').on('submit',function (e){
@@ -1873,6 +1912,11 @@ $first_part = $components[1];
             e.preventDefault()
             var data = $(this).serialize();
             addCurrency(data)
+        })
+        $('#EditExchangeRate').on('submit',function (e) {
+            e.preventDefault()
+            var data = $(this).serialize();
+            editCurrency(data)
         })
 
 
