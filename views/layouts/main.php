@@ -1228,6 +1228,7 @@ $first_part = $components[1];
             });
         }
         getUsers();
+
         $(document.body).on('click', '.selleredit', function () {
             var id = $(this).data('id');
             $('#bankNames').empty();
@@ -1237,8 +1238,8 @@ $first_part = $components[1];
                 url: "/users?sellerid=" + id,
                 type: "POST",
                 success: function (result) {
+                    console.log(result);
                     var data = JSON.parse(result)
-                    console.log(data)
 
                     $.each(data, function (i, val) {
                         $('#edituserform input[name="id"]').val(val.id)
