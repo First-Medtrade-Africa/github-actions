@@ -196,7 +196,7 @@ class SalesController extends Controller
                     $totalYearlyValueUsd += $this->useMarkup((int)$value['productPrice'], $internationalMarkup);
                 }
             }
-            $totalYearlySalesValue = (int)$totalMonthlyValueNgn +((int)$totalMonthlyValueUsd*(int)$exhancheRate);
+            $totalYearlySalesValue = (int)$totalYearlyValueNgn + ((int)$totalYearlyValueUsd*(int)$exhancheRate);
         }
         else{
             $totalYearlySalesValue = 0;
