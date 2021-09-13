@@ -160,7 +160,7 @@ class SalesController extends Controller
         $totalYearlyValueUsd = '';
         $totalYearlyValueNgn = '';
 
-        if(empty($totalDailyOrdersValue)) {
+        if(!empty($totalDailyOrdersValue)) {
             foreach ($totalDailyOrdersValue as $key => $value) {
                 if ($value['productPriceCurr'] == 'NGN') {
                     $totalDailyValueNgn += $this->useMarkup((int)$value['productPrice'], $domesticMarkup);
@@ -174,7 +174,7 @@ class SalesController extends Controller
             $totalDialySalesValue = 0;
         }
 
-        if(empty($totalMonthlyOrdersValue)) {
+        if(!empty($totalMonthlyOrdersValue)) {
             foreach ($totalMonthlyOrdersValue as $key => $value) {
                 if ($value['productPriceCurr'] == 'NGN') {
                     $totalMonthlyValueNgn += $this->useMarkup((int)$value['productPrice'], $domesticMarkup);
@@ -188,7 +188,7 @@ class SalesController extends Controller
             $totalMonthlySalesValue = 0;
         }
 
-        if(empty($totalAnnualOrdersValue)) {
+        if(!empty($totalAnnualOrdersValue)) {
             foreach ($totalAnnualOrdersValue as $key => $value) {
                 if ($value['productPriceCurr'] == 'NGN') {
                     $totalYearlyValueNgn += $this->useMarkup((int)$value['productPrice'], $domesticMarkup);

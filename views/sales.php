@@ -74,8 +74,8 @@
                 <i class="fas fa-shopping-cart"></i>
             </span>
             <div class="info-box-content">
-                <span class="info-box-text"><?php echo date('Y',strtotime(date("Y/m/d")));?> Sales</span>
-                <span class="info-box-number">&#8358; <?=$annualsalesValue ?></span>
+                <span class="info-box-text"><?=date("Y");?> Sales</span>
+                <span class="info-box-number">&#8358;<?= number_format($annualsalesValue) ?></span>
             </div>
         </div>
     </div>
