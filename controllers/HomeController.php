@@ -69,7 +69,7 @@ class HomeController extends Controller
             'noOrders'=>count($this->getOrders()),
             'totalBuyers'=>count($this->getUsers('buyer')),
             'totalProducts'=>$totalProductNo,
-            'totalNoSellers'=>count($this->getUsers('seller')),
+            'totalNoSellers'=>count($this->getUsers('retailer')),
         ]);
 
     }
