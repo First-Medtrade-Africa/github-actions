@@ -1,18 +1,4 @@
 <?php
-
-// echo '</br>';
-// print_r($totalusd);
-
-// echo '</br>';
-// print_r($totalngn);
-// echo '</br>';
-// print_r($markup);
-// echo '</br>';
-// print_r($domesticMarkup);
-// echo '</br>';
-// print_r($internationalMarkup);
-// echo '</br>';
-// print_r($totalProfit);
 ?>
 <div class="row">
 
@@ -37,6 +23,47 @@
             <div class="info-box-content">
                 <span class="info-box-text">Sales This <?php echo date('F',strtotime(date("Y/m/d")));?></span>
                 <span class="info-box-number"><?=$monthlySales ?></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-6">
+        <!-- small box -->
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1">
+                <i class="fas fa-shopping-cart"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text"><?php echo date('Y',strtotime(date("Y/m/d")));?> Sales</span>
+                <span class="info-box-number"><?=$annualEarnings ?></span>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div class="row">
+
+    <div class="col-lg-4 col-6">
+        <!-- small box -->
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1">
+                <i class="fas fa-shopping-cart"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text">Sales This <?php echo date('l',strtotime(date("Y/m/d")));?></span>
+                <span class="info-box-number">&#8358; <?=$totalDialy?></span>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-6">
+        <!-- small box -->
+        <div class="info-box">
+            <span class="info-box-icon bg-warning elevation-1">
+                <i class="fas fa-shopping-cart"></i>
+            </span>
+            <div class="info-box-content">
+                <span class="info-box-text">Sales This <?php echo date('F',strtotime(date("Y/m/d")));?></span>
+                <span class="info-box-number">&#8358; <?=$monthlySalesValue ?></span>
             </div>
         </div>
     </div>
