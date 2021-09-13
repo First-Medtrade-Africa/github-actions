@@ -642,7 +642,7 @@ $first_part = $components[1];
                         var badge = ''
                         var currency = ''
                         switch (status) {
-                            case 'Awaiting Confirmation':
+                            case 'Pending Confirmation':
                                 badge = 'badge-secondary';
                                 break;
                             case 'Order Placed':
@@ -1009,7 +1009,7 @@ $first_part = $components[1];
                 '<div class="form-group" >'+
                     '<select type="text" class="form-control" data-id="'+id+'">'+
                         '<option value="" disabled selected>Choose Status</option>'+
-                        '<option value="Awaiting Confirmation">Awaiting Confirmation</option>' +
+                        '<option value="Pending Confirmation">Pending Confirmation</option>' +
                         '<option value=Other Placed">Other Placed</option>' +
                         '<option value="Shipping">Shipping</option>' +
                         '<option value="Delivery in Progress">Delivery in Progress</option>' +
@@ -1194,7 +1194,7 @@ $first_part = $components[1];
                         $('#Manufacturers tbody').append('' +
                             '<tr>' +
                             '<td>' + val.name + '</td>' +
-                            '<td>' + val.manufacturers + '</td>' +
+                            '<td>' + val.manufacturer + '</td>' +
                             '<td>' + val.email + '</td>' +
                             '<td>' + val.phone + '</td>' +
                             '<td>' + val.role + '</td>' +
