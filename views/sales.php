@@ -75,7 +75,7 @@
             </span>
             <div class="info-box-content">
                 <span class="info-box-text"><?php echo date('Y',strtotime(date("Y/m/d")));?> Sales</span>
-                <span class="info-box-number"><?=$annualsalesValue ?></span>
+                <span class="info-box-number">&#8358; <?=$annualsalesValue ?></span>
             </div>
         </div>
     </div>
