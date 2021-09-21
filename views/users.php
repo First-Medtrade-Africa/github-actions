@@ -188,7 +188,7 @@
             </div>
             <!-- /.modal-dialog -->
         </div>
-             <div class="modal" id="sellerView">
+        <div class="modal" id="sellerView">
          <div class="modal-dialog modal-lg">
              <div class="modal-content">
                  <div class="modal-header">

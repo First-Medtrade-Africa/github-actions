@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     protected function getProducts()
     {
-        $sql = "SELECT products.* ,vendors.storeName, vendors.`vendors_city`, products_details.* FROM products JOIN vendors JOIN products_details WHERE   `products`.`vendorId` = `vendors`.`id` AND `products`.`id` =`products_details`.`product_id`";
+        $sql = "SELECT products.* ,vendors.storeName, vendors.`vendors_city`, products_details.* FROM products JOIN vendors JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`vendorId` = `vendors`.`id` AND `products`.`id` =`products_details`.`product_id`";
         $statement = Application::$app->db->pdo->query($sql);
 
         if ($statement->rowCount() > 0){
@@ -150,14 +150,9 @@ class ProductController extends Controller
     }
 
     public function deleteProduct($id){
-        $sql = "DELETE  FROM `products`  WHERE `products`.`id` = ?" ;
+        $sql = "UPDATE `products` SET `isDeleted` = '1' WHERE `products`.`id` = ?" ;
         $statement = Application::$app->db->pdo->prepare($sql);
-        $statement->execute([$id]);
-        $sql = "DELETE  FROM `products_details`  WHERE `products_details`.`product_id` = ?" ;
-        $statement = Application::$app->db->pdo->prepare($sql);
-        $statement->execute([$id]);
-        $sql = "DELETE  FROM `products_viewed`  WHERE `products_viewed`.`products_id` = ?" ;
-        $statement = Application::$app->db->pdo->prepare($sql);
+
         $statement->execute([$id]);
         if ($statement->rowCount() > 0){
             return $statement->fetch(\PDO::FETCH_ASSOC);

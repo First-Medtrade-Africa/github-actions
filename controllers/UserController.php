@@ -41,9 +41,21 @@ class UserController extends Controller
     }
     public function getUnSeller()
     {
-        $sql = "SELECT * FROM `users` WHERE `users`.`verified` = 0";
+        $sql = "SELECT `users`.* FROM `users` WHERE `users`.`verified` = 0";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute();
+        if ($stmt->rowCount() == 0) {
+            return false;
+        } else {
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+    }
+    public function getUnSellerById($id)
+    {
+        // $sql = "SELECT * FROM `users` WHERE ";
+        $sql = "SELECT `users`.*,`vendors`.`address`,`vendors`.`storeName`,`vendors`.`postal_code`,`vendors`.`vendors_city`,`vendors`.`country`,`vendors`.`bank`,`vendors`.`acctNo`,`vendors`.`acctName`,`vendors`.`acctType`,`vendors`.`bvn` FROM `users` JOIN `vendors` WHERE `users`.`id` = ? AND `users`.`verified` = 0 AND `vendors`.`user_id` = `users`.`id`";
+        $stmt = Application::$app->db->pdo->prepare($sql);
+        $stmt->execute([$id]);
         if ($stmt->rowCount() == 0) {
             return false;
         } else {
@@ -143,7 +155,7 @@ class UserController extends Controller
         }
     }
 
-   public function getManufacturers()
+    public function getManufacturers()
     {
         $sql = "SELECT `users`.*,`manufacturers`.`manufacturer`,`manufacturers`.`approved` FROM `users` JOIN `manufacturers` WHERE role='manufacturer' AND manufacturers.isDeleted = 0 AND `manufacturers`.`user_id`=`users`.`id`";
         $stmt = Application::$app->db->pdo->prepare($sql);
@@ -154,6 +166,7 @@ class UserController extends Controller
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         }
     }
+
     public function users(Request $request){
 
         if ($request->getMethod() === 'post'){
@@ -197,6 +210,11 @@ class UserController extends Controller
             }
             if (isset($_GET['unseller'])){
                 $data3 = $this->getUnSeller();
+                return json_encode($data3);
+            }
+            if (isset($_GET['unsellerid'])){
+                $id =$_GET['unsellerid'];
+                $data3 = $this->getUnSellerById($id);
                 return json_encode($data3);
             }
             if(isset($_GET['authorizeSeller'])){

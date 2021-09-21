@@ -39,7 +39,9 @@ class OrdersController extends Controller{
 
     public function getSingleOrder($id)
     {
-        $sql = "SELECT `orders`.*,`vendors`.`address`,`vendors`.`vendors_city`,`vendors`.`storeName`,`vendors`.`bank`,`vendors`.`acctName`,`vendors`.`acctNo`,`vendors`.`acctType`,`buyersAddressBook`.`buyer_address`,`buyersAddressBook`.city,`buyersAddressBook`.state, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users`,`products`,`buyersAddressBook`,`vendors` WHERE `orders`.orderId = ? AND `orders`.userid = `users`.id AND `orders`.productid = `products`.id AND `buyersAddressBook`.`user_id`= `orders`.`userid` AND vendors.user_id = products.vendorId";
+        $sql = "SELECT `orders`.*, `vendors`.`address`, `vendors`.`vendors_city`, `vendors`.`storeName`, `vendors`.`bank`, `vendors`.`acctName`, `vendors`.`acctNo`, `vendors`.`acctType`, `buyersAddressBook`.`buyer_address`, `buyersAddressBook`.city, `buyersAddressBook`.state, `users`.name, `users`.email, `users`.phone, `products`.`productName`, `products`.`productPrice`, `products`.`minimumOrderQuantity`, `products`.`productPriceCurr`, `products`.`vendorId` FROM `orders` JOIN `users`, `products`, `buyersAddressBook`, `vendors` WHERE `orders`.id = ? AND `orders`.userid = `users`.id AND `orders`.productid = `products`.id AND `buyersAddressBook`.`user_id` = `orders`.`userid` AND `vendors`.`id` = `products`.`vendorId`";
+        // $sql = "SELECT `orders`.*, `buyersaddressbook`.`buyer_address`, `buyersaddressbook`.city, `buyersaddressbook`.state, `users`.name, `users`.email, `users`.phone, `products`.`productName`, `products`.`productPrice`, `products`.`minimumOrderQuantity`, `products`.`productPriceCurr`, `products`.`vendorId`, `vendors`.`storeName` FROM `orders` JOIN `users`, `products`, `buyersaddressbook`, `vendors` WHERE `orders`.id = 1 AND `users`.id = `orders`.userid AND `products`.id = `orders`.productid AND `buyersaddressbook`.`user_id` = `orders`.`userid` AND `vendors`.`id`=`products`.`vendorId`";
+
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([$id]);
         if ($stmt->rowCount() == 0) {
@@ -51,7 +53,7 @@ class OrdersController extends Controller{
     
     public function getSimilarOrder($id)
     {
-        $sql = "SELECT `orders`.*,`vendors`.`address`,`vendors`.`vendors_city`,`vendors`.`storeName`,`vendors`.`bank`,`vendors`.`acctName`,`vendors`.`acctNo`,`vendors`.`acctType`,`buyersAddressBook`.`buyer_address`,`buyersAddressBook`.city,`buyersAddressBook`.state, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users`,`products`,`buyersAddressBook`,`vendors` WHERE `orders`.orderId = ? AND `orders`.userid = `users`.id AND `orders`.productid = `products`.id AND `buyersAddressBook`.`user_id`= `orders`.`userid` AND vendors.user_id = products.vendorId";
+        $sql = "SELECT `orders`.*,`vendors`.`address`,`vendors`.`vendors_city`,`vendors`.`storeName`,`vendors`.`bank`,`vendors`.`acctName`,`vendors`.`acctNo`,`vendors`.`acctType`,`buyersAddressBook`.`buyer_address`,`buyersAddressBook`.city,`buyersAddressBook`.state, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users`,`products`,`buyersAddressBook`,`vendors` WHERE `orders`.orderId = ? AND `orders`.userid = `users`.id AND `orders`.productid = `products`.id AND `buyersAddressBook`.`user_id`= `orders`.`userid` AND vendors.id = products.vendorId";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([$id]);
         if ($stmt->rowCount() == 0) {

@@ -1,4 +1,5 @@
 <?php
+
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(dirname(__DIR__));
 $dotenv->load();
@@ -9,6 +10,7 @@ use app\controllers\HomeController;
 use app\controllers\MarkUpController;
 use app\controllers\ProductController;
 use app\controllers\PromotionsController;
+use app\controllers\BannersController;
 use app\controllers\SalesController;
 use app\controllers\SiteController;
 use app\controllers\OrdersController;
@@ -63,5 +65,8 @@ $app->router->post('/sales', [SalesController::class, 'sales']);
 
 $app->router->get('/markup', [MarkUpController::class, 'markup']);
 $app->router->post('/markup', [MarkUpController::class, 'markup']);
+
+$app->router->get('/banners', [BannersController::class, 'banners']);
+$app->router->post('/banners', [BannersController::class, 'banners']);
 
 $app->run();

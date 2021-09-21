@@ -156,6 +156,17 @@ $first_part = $components[1];
                             </li>
                         </ul>
                     </li>
+                    <li class="nav-item menu-open">
+                        <a href="/banners" class="nav-link <?php if ($first_part=="banners") {echo "active"; } else  {echo "";}?>">
+                            <i class="nav-icon fas fa-copy"></i>
+                            <p>Banners<i class="fas fa-angle-left right"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/banners" class="nav-link <?php if ($first_part=="banners") {echo "active"; } else  {echo "";}?>"><i class="far fa-circle nav-icon"></i><p>Banners</p></a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->
@@ -389,8 +400,6 @@ $first_part = $components[1];
             }
         })
     })
-    
-    
     $('#prodcountry').keyup(function (){
         var ty = $(this).val();
         $.ajax({
@@ -626,7 +635,37 @@ $first_part = $components[1];
             }
         })
     })
-    
+    if(window,location.pathname == '/products'){
+        $(".delbtn").click(function(e){
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.log($(this).data('id'));
+                    let id = $(this).data('id');
+                    $.ajax({
+                        url: '/products?delproductid='+id,
+                        type: 'POST',
+                        success: function (result) {
+                            var data = JSON.parse(result)
+                            console.log(data)
+                            setTimeout(() => {
+                                location.reload();
+                            }, 3000);
+                        }
+                    })
+                }
+            })
+           
+        })
+    }
     if(window.location.pathname == '/orders'){
 
         function getOrders() {
@@ -857,10 +896,11 @@ $first_part = $components[1];
             });
 
         }
+        function getMarkuo(){}
         $(document.body).on('click','.more',function () {
             $('#details .modal-body').empty()
-            var id = $(this).attr('data-orderid');
-            var vid = $(this).attr('data-vid');
+            var id = $(this).data('orderid');
+            var vid = $(this).data('vid');
             var userid =''
             var vendorid = ''
             console.log(id)
@@ -931,8 +971,8 @@ $first_part = $components[1];
         })
         $(document.body).on('click','.geninvoice',function(){
             
-            var id = $(this).attr('data-id');
-            var vid = $(this).attr('data-vid');
+            var id = $(this).data('id');
+            var vid = $(this).data('vid');
             var userid ='';
             var orderid ='';
             // $('#details .modal-body').empty()
@@ -960,20 +1000,26 @@ $first_part = $components[1];
                         type:'POST',
                         success:function(result){
                             var data = JSON.parse(result)
+                            var curr = ''
                             console.log(data)
                             $('#orderItems tbody').empty();
 
                             $.each(data,function (i,val) {
                                 var price = val.productPrice;
                                 var shipping = val.rate;
-                                var subtotal = price + shipping;
+                                var subtotal = Number(price) + Number(shipping);
+                                if(val.productPriceCurr == "NGN"){
+                                    curr = '₦';
+                                }else{
+                                    curr = '$';
+                                }
                                 $('#orderItems tbody').append('' +
-                                    '<tr>' +
-                                    '<td>'+val.quantity+'</td>' +
-                                    '<td>'+val.productName+'</td>' +
-                                    '<td>&#8358;'+Number((val.productPrice)).toLocaleString()+'</td>' +
-                                    '<td>&#8358; '+Number((val.rate)).toLocaleString()+'</td>' +
-                                    '<td> &#8358; ' + Number((subtotal)).toLocaleString() +'</td>' +
+                                    '<tr>'+
+                                    '<td>'+ val.quantity+'</td>' +
+                                    '<td>'+ val.productName+'</td>' +
+                                    '<td>'+ curr +  Number((val.productPrice)).toLocaleString()+'</td>' +
+                                    '<td>'+ curr +  Number((val.rate)).toLocaleString()+'</td>' +
+                                    '<td>'+ curr +  Number((subtotal)).toLocaleString() +'</td>' +
                                     '</tr>')
                             })
                         }
@@ -1151,6 +1197,7 @@ $first_part = $components[1];
                 type: "POST",
                 success: function (result) {
                     var data = JSON.parse(result)
+                    console.log(data);
                     $.each(data, function (i, val) {
                         $('#Unverifiedsellertable tbody').append('' +
                             '<tr>' +
@@ -1162,7 +1209,7 @@ $first_part = $components[1];
                             '<td>' +
                             '' +
                             '<a href="" class="btn btn-success btn-sm selleredit" data-id="' + val.id + '" data-toggle="modal" data-target="#selleredit">Edit</a> ' +
-                            '<a href="" class="btn btn-info btn-sm">View</a> ' +
+                            '<a href="" class="btn btn-info btn-sm vSeller" data-id="' + val.id + '" data-toggle="modal" data-target="#sellerView" >View</a> ' +
                             '<a href="" class="btn btn-danger btn-sm sellerdelete" data-id="' + val.id + '" >Delete</a> ' +
                             '</td>' +
                             '</tr>' +
@@ -1227,6 +1274,26 @@ $first_part = $components[1];
                 console.log(error);
             });
         }
+        function getBankByCode(code){
+            
+            let request = axios.get('https://api.ravepay.co/v2/banks/NG?public_key=FLWPUBK-e2d297d745f5db71268af0f79e8e2332-X');
+            let bank_name = ''
+            request.then(function (response) {
+            
+                for (var i = 0; i < response.data.data.Banks.length; i++) {
+                    if (response.data.data.Banks[i].Code == code) {
+                        console.log(response.data.data.Banks[i].Name);
+                        // bank_name = response.data.data.Banks[i].Name;
+                        $('.vendorBank').text( response.data.data.Banks[i].Name);
+                    }else{
+                        return 'no bank';
+                    }
+                }
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+        }
         getUsers();
 
         $(document.body).on('click', '.selleredit', function () {
@@ -1287,9 +1354,10 @@ $first_part = $components[1];
                 type: "POST",
                 success: function (result) {
                     var data = JSON.parse(result)
-
                     console.log(data)
+                    var bank_name = ''
                     $.each(data, function (i, val) {
+                        getBankByCode(val.bank)
                         $('.vendorName').text(val.name)
                         $('.vendorStore').text(val.storeName)
                         $('.vendorEmail').text(val.email)
@@ -1298,7 +1366,7 @@ $first_part = $components[1];
                         $('.vendorCountry').text(val.country)
                         $('.vendorCity').text(val.vendors_city)
                         $('.vendorPostal').text(val.postal_code)
-                        $('.vendorBank').text(val.bank)
+                        $('.vendorBank').text(bank_name)
                         $('.vendorAccNo').text(val.acctNo)
                         $('.vendorAccName').text(val.acctName)
                         $('.vendorAccType').text(val.acctType)
@@ -1531,6 +1599,33 @@ $first_part = $components[1];
                         $('.vendorAddress').text(val.address)
                         $('.vendorCountry').text(val.country)
                         $('.vendorCity').text(val.manufacturer_city)
+                        $('.vendorPostal').text(val.postal_code)
+                        $('.vendorBank').text(val.bank)
+                        $('.vendorAccNo').text(val.acctNo)
+                        $('.vendorAccName').text(val.acctName)
+                        $('.vendorAccType').text(val.acctType)
+                    })
+                }
+
+            })
+        })
+         $(document.body).on('click', '.vSeller', function () {
+            var id = $(this).data('id');
+            $.ajax({
+                url: "/users?unsellerid=" + id,
+                type: "POST",
+                success: function (result) {
+                    console.log(result)
+                    var data = JSON.parse(result)
+                    console.log(data)
+                    $.each(data, function (i, val) {
+                        $('.vendorName').text(val.name)
+                        $('.vendorStore').text(val.storeName)
+                        $('.vendorEmail').text(val.email)
+                        $('.vendorPhone').text(val.phone)
+                        $('.vendorAddress').text(val.address)
+                        $('.vendorCountry').text(val.country)
+                        $('.vendorCity').text(val.vendors_city)
                         $('.vendorPostal').text(val.postal_code)
                         $('.vendorBank').text(val.bank)
                         $('.vendorAccNo').text(val.acctNo)
