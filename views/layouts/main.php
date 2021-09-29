@@ -133,6 +133,7 @@ $first_part = $components[1];
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item"><a href="/orders" class="nav-link <?php if ($first_part=="orders") {echo "active"; } else  {echo "";}?>"><i class="far fa-circle nav-icon"></i><p>View Orders</p></a></li>
+                            <li class="nav-item"><a href="/quotes" class="nav-link <?php if ($first_part=="quotes") {echo "active"; } else  {echo "";}?>"><i class="far fa-circle nav-icon"></i><p>View Quotes</p></a></li>
                         </ul>
                     </li>
                     <li class="nav-item menu-open">
@@ -2024,6 +2025,44 @@ $first_part = $components[1];
 
         getExchange()
         getMarkup();
+    }
+    if(window.location.pathname == '/quotes'){
+        
+        function getQuote(){
+            $('#Quotetable tbody').empty();
+            $.ajax({
+                url:'/quotes?gq=22',
+                type: 'POST',
+                success: function (result) {
+                    var data = JSON.parse(result)
+                    var date = '';
+                    var date2 = '';
+                    console.log(data);
+                    $.each(data,function (i, val) {
+                        date = new Date(val.timestamp)
+                        date2 = new Date(val.deliveryDate)
+                        $('#Quotetable tbody').append(
+                            '<tr>' +
+                            '<td>'+date.toDateString()+'</td>' +
+                            '<td>'+val.name+'</td>' +
+                            '<td>'+val.email+'</td>' +
+                            '<td>'+val.phone+'</td>' +
+                            '<td>'+val.personType+'</td>' +
+                            '<td>'+val.productName+'</td>' +
+                            '<td>'+val.productQuantity+'</td>' +
+                            '<td>'+val.productSize+'</td>' +
+                            '<td>'+date2.toDateString()+'</td>' +
+                            '<td><a href="" class="btn btn-xs btn-success" data-id="'+val.id+'" >More</a> </td>' +
+                            '</tr>' +
+                            ''
+                        )
+
+                    })
+                }
+            })
+        }
+
+        getQuote();
     }
 </script>
 </body>

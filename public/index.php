@@ -14,6 +14,7 @@ use app\controllers\BannersController;
 use app\controllers\SalesController;
 use app\controllers\SiteController;
 use app\controllers\OrdersController;
+use app\controllers\QuotesController;
 use app\controllers\UserController;
 use app\core\Application;
 
@@ -68,5 +69,8 @@ $app->router->post('/markup', [MarkUpController::class, 'markup']);
 
 $app->router->get('/banners', [BannersController::class, 'banners']);
 $app->router->post('/banners', [BannersController::class, 'banners']);
+
+$app->router->get('/quotes', [QuotesController::class, 'quote']);
+$app->router->post('/quotes', [QuotesController::class, 'quote']);
 
 $app->run();

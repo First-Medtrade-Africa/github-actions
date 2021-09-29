@@ -442,7 +442,6 @@ class OrdersController extends Controller{
                 $isdelete  = 0;
 
                 $data = $this->createUser($name, $email, $phone, $password, $role, $verified, $isdelete);
-//                return $data;
                 if ($data){
                     return json_encode(array("statusCode" => 200,"data"=>$data));
                 }else{
@@ -488,7 +487,6 @@ class OrdersController extends Controller{
         $this->setLayout('main');
         return $this->render('orders', []);
     }
-
 
 
 }
