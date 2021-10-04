@@ -892,7 +892,7 @@ $first_part = $components[1];
                                 let del_address = buyer_address+','+ city+','+ state;
 
                                 
-                                var orderstr = 'userId='+userid+'&product_id='+id+'&product_name='+productname+'&quantity='+product_moq+'&product_size=""&orderstatus="Awaiting Confirmation"&orderID=FM-'+ uniqueid+'&rate='+rate+'&shipper='+carrier+'&delivery_type=""&delivery_address='+del_address+'&Oname='+name+'&Oemail='+email
+                                var orderstr = 'userId='+userid+'&product_id='+id+'&product_name='+productname+'&quantity='+product_moq+'&product_size=""&orderstatus=Awaiting Confirmation&orderID=FM-'+ uniqueid+'&rate='+rate+'&shipper='+carrier+'&delivery_type=""&delivery_address='+del_address+'&Oname='+name+'&Oemail='+email
                                 console.log(orderstr);
 
                                 $.ajax({
@@ -1177,6 +1177,7 @@ $first_part = $components[1];
         })
         getOrders();
     }
+
     if(window.location.pathname == '/users'){
         var bankCode = '';
         function getUsers() {
