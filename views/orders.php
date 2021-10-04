@@ -107,9 +107,9 @@
                             <div class="col-sm-4">
                                 <select name="units" class="form-control moqunit" id="" required>
                                     <option value="" disabled selected>Select Unit</option>
-                                    <option value="Units" >units</option>
-                                    <option value="Pieces" >pieces</option>
-                                    <option value="Carton" >carton</option>
+                                    <option value="Units" >Units</option>
+                                    <option value="Pieces" >Pieces</option>
+                                    <option value="Carton" >Carton</option>
                                     <option value="Containers" >Containers</option>
                                 </select>
                             </div>

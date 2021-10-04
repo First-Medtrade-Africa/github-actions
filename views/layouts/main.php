@@ -292,15 +292,25 @@ $first_part = $components[1];
             "autoWidth": false,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+
         $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,
         });
+        // $('#Quotetable').DataTable({
+        //     "paging": true,
+        //     "lengthChange": false,
+        //     "searching": false,
+        //     "ordering": true,
+        //     "info": true,
+        //     "autoWidth": false,
+        //     "responsive": true,
+        // });
         // $('#sellertable').DataTable({
         //     "paging": true,
         //     "lengthChange": false,
@@ -590,7 +600,6 @@ $first_part = $components[1];
 
         })
     })
-    
     $(document.body).on('click', '.editsubbtn',function(){
         var valu = $(this).attr('data-name');
         var id = $(this).attr('data-id');
@@ -636,7 +645,10 @@ $first_part = $components[1];
             }
         })
     })
-    if(window,location.pathname == '/products'){
+
+    if(window.location.pathname == '/products')
+    {
+
         $(".delbtn").click(function(e){
             e.preventDefault();
             Swal.fire({
@@ -666,6 +678,39 @@ $first_part = $components[1];
             })
            
         })
+        $('.approvebtn').click(function (e) 
+        {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are About to Approve this Product",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Approve Product!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = $(this).data('id')
+                    $.ajax({
+                        url: '/products?approveProduct=' + id,
+                        type: 'POST',
+                        success: function (result) {
+                            Swal.fire(
+                                'Product Approved!',
+                                'Product has Been Approved Successfully',
+                                'success'
+                            )
+                            setTimeout(function () {
+                                // Do something after 5 seconds
+                                getUsers()
+                            }, 2000);
+                        }
+                    })
+                }
+            })
+        })
+
     }
     if(window.location.pathname == '/orders'){
 
@@ -732,11 +777,13 @@ $first_part = $components[1];
 
             })
         }
+
         function getProducts() {
             $.ajax({
                 url:"/orders?products=22",
                 type: "POST",
                 success:function (result){
+                    console.log(result)
                     var data = JSON.parse(result)
                     console.log(data)
                     $.each(data , function (i,val) {
@@ -745,7 +792,9 @@ $first_part = $components[1];
                 }
             })
         }
+        
         function genenrateorderID(){}
+        
         function getSingleProduct(id) {
 
             console.log(id);
@@ -756,6 +805,7 @@ $first_part = $components[1];
                 url:"/orders?singleproduct="+id,
                 type: "POST",
                 success:function (result){
+                    console.log(result);
                     var data = JSON.parse(result);
                     console.log(data.quantitySize);
                     $('input[name ="moq"]').val(data.minimumOrderQuantity);
@@ -763,9 +813,11 @@ $first_part = $components[1];
                 }
             })
         }
+        
         function generatePwd(){
             return Math.random().toString(36).slice(8);
         }
+        
         function createNewOrder(data){
             console.log(data);
 
@@ -776,73 +828,95 @@ $first_part = $components[1];
                 password: generatePwd(),
                 role: 'buyer'
             }
-            var userdata = newUser;
+
+            var userdata = 'name='+data[5].value+'&email='+data[6].value+'&phone='+data[7].value+'&password='+generatePwd()+'&role="buyer"';
             var userid = '';
             var productid = '';
+            
+            var buyer_address =  data[10].value;
+            var postal_code = '';
+            var city = data[9].value;
+            var state = data[8].value;
+            var product_id = data[0].value;
+            var product_moq = data[1].value;
+            var rate = data[4].value;
+            var carrier = data[3].value;
+            var name = data[5].value;
+            var email = data[6].value;
+
             console.log(userdata);
 
 
             $.ajax({
-                url:'/orders',
-                dataType: "json",
+                url:'/orders?'+userdata,
                 type:'POST',
-                data:userdata,
-                success:function (res) {
+                success: function (res) {
+                    
                     console.log(res);
+                    console.log('success');
+                    var dat = JSON.parse(res)
+                    
+                    console.log(dat);
 
-                    if(res.statusCode === 200){
-                       userid = res.data;
+                    if(dat.statusCode === 200){
+                        console.log('continued keep going');
+                        userid = dat.data;
 
                         var addressdetails = {
                             id:userid,
-                            buyer_address:data[10].value,
+                            buyer_address: buyer_address,
                             postal_code:'',
-                            city:data[9].value,
-                            state:data[8].value,
+                            city:city,
+                            state:state,
                             country:'Ngeria'
                         }
-
+                        console.log(addressdetails)
+                        var data = 'id='+userid+'&buyer_address='+buyer_address+'&postal_code=""&city='+city+'&state='+state+'&country="Nigeria"'
+                       
                         $.ajax({
-                            url:'/orders',
-                            dataType: "json",
+                            url:'/orders?'+data,
                             type:'POST',
-                            data:addressdetails,
                             success:function (res) {
                                 console.log(res);
-                                var id = data[0].value
+                                var id = product_id
                                 id = id.substring(id.lastIndexOf("-") + 1).trim();
-                                let str = data[0].value;
+                                let str = product_id;
+                                
                                 var productname = str.substring(0, str.lastIndexOf('-') - 1);
+
                                 const uniqueid = generateUniqueId({
                                     length: 5,
                                     useLetters: false
                                 });
-                                let del_address = data[10].value+', '+ data[9].value+', '+ data[8].value
-                                var order = {
-                                    userId:userid,
-                                    product_id:id,
-                                    product_name:productname,
-                                    quantity:data[1].value,
-                                    product_size:'',
-                                    orderstatus:'Awaiting Confirmation',
-                                    orderID:'FM-'+ uniqueid,
-                                    rate:data[4].value,
-                                    shipper:data[3].value,
-                                    delivery_type:'',
-                                    delivery_address:del_address,
-                                }
+                                
+                                let del_address = buyer_address+','+ city+','+ state;
+
+                                
+                                var orderstr = 'userId='+userid+'&product_id='+id+'&product_name='+productname+'&quantity='+product_moq+'&product_size=""&orderstatus="Awaiting Confirmation"&orderID=FM-'+ uniqueid+'&rate='+rate+'&shipper='+carrier+'&delivery_type=""&delivery_address='+del_address+'&Oname='+name+'&Oemail='+email
+                                console.log(orderstr);
+
                                 $.ajax({
-                                    url:'/orders',
-                                    dataType: "json",
+                                    url:'/orders?'+orderstr,
                                     type:'POST',
-                                    data:order,
                                     success:function (res) {
                                         console.log(res)
+
+                                        $("#createOrder").modal('hide');
+                                        Swal.fire(
+                                            'Order Created!',
+                                            'Your Order has been Created.',
+                                            'success'
+                                        )
+                                        setTimeout(function() {
+                                            // Do something after 5 seconds
+                                            getOrders()
+                                        }, 700);
                                     }
                                 })
-                                console.log(order)
                             }
                         })
+                    }else{
+                        console.log('failed');
                     }
 
                 }
@@ -879,6 +953,7 @@ $first_part = $components[1];
                 }
             );
         }
+
         function genPDF(){
             html2canvas($('.invoice')[0],{
                 onrendered:function(canvas){
@@ -897,7 +972,9 @@ $first_part = $components[1];
             });
 
         }
+
         function getMarkuo(){}
+
         $(document.body).on('click','.more',function () {
             $('#details .modal-body').empty()
             var id = $(this).data('orderid');
@@ -1867,7 +1944,7 @@ $first_part = $components[1];
 
         })
     }
-     if(window.location.pathname == '/markup'){
+    if(window.location.pathname == '/markup'){
         function getMarkup(){
             $('#markupTable tbody').empty();
             $.ajax({
@@ -2027,7 +2104,26 @@ $first_part = $components[1];
         getMarkup();
     }
     if(window.location.pathname == '/quotes'){
-        
+        var table_count = 0;
+
+        function initailize_data_table(){
+
+            if(table_count === 0){
+                $('#Quotetable').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                });
+            } else {
+                table_count = 1;
+            }
+            
+        }
+
         function getQuote(){
             $('#Quotetable tbody').empty();
             $.ajax({
@@ -2052,17 +2148,78 @@ $first_part = $components[1];
                             '<td>'+val.productQuantity+'</td>' +
                             '<td>'+val.productSize+'</td>' +
                             '<td>'+date2.toDateString()+'</td>' +
-                            '<td><a href="" class="btn btn-xs btn-success" data-id="'+val.id+'" >More</a> </td>' +
+                            '<td><a href="" class="btn btn-xs btn-success more" data-id="'+val.id+'" data-toggle="modal" data-target="#details" >More</a> </td>' +
                             '</tr>' +
                             ''
                         )
-
                     })
+                    initailize_data_table();
                 }
             })
         }
 
         getQuote();
+
+        $(document.body).on('click','.more',function (e) {
+            e.preventDefault();
+            $('#details .modal-body').empty()
+            var id = $(this).data('id');
+            var userid =''
+            var vendorid = ''
+            $.ajax({
+                url:'/quotes?pt='+id,
+                type:'POST',
+                success:function (result) {
+                    var data = JSON.parse(result)
+                    console.log(data)
+                    $.each(data,function (index,detail) {
+                        userid = detail.userid
+                        vendorid = detail.user_id
+                        $('#details .modal-body').append('' +
+                            '<h2>Quote From</h2>'+
+                            '<ul class="list-group todetails">'+
+                                '<li class="list-group-item"><b class="text-uppercase fs-4">Name:</b>  '+ detail.name +'</li>'+
+                                '<li class="list-group-item"><b class="text-uppercase fs-4">Email:</b>  '+ detail.email +'</li>'+
+                                '<li class="list-group-item"><b class="text-uppercase fs-4">Phone:</b>  '+ detail.phone +'</li>'+
+                                '<li class="list-group-item"><b class="text-uppercase fs-4">Occupation:</b>  '+ detail.personType +'</li>'+
+                            '</ul>'+
+                            '')
+                    })
+                    // $.ajax({
+                    //     url:'/orders?vd='+vendorid,
+                    //     type:'POST',
+                    //     success:function (result) {
+                    //         var data = JSON.parse(result)
+                            
+                    //         $.each(data,function (i,vend) {
+                    //             $('#details .fromDetails').append('' +
+                    //                     '<li class="list-group-item"><b class="text-uppercase fs-4">Name:</b>  ' + vend.name + '</li>' +
+                    //                     '<li class="list-group-item"><b class="text-uppercase fs-4">Phone:</b>  ' + vend.phone + '</li>' +
+                    //                     '<li class="list-group-item"><b class="text-uppercase fs-4">Email:</b>  ' +  vend.email   + '</li>' +
+                    //                 '')
+                    //         })
+                    //     }
+                    // })
+                    // console.log('buyer id= '+userid)
+                    
+                    //  $.ajax({
+                    //     url:'/orders?ba='+ userid,
+                    //     type:'POST',
+                    //     success:function (result) {
+                    //         var dat = JSON.parse(result)
+                            
+                    //         console.log(dat)
+                            
+                    //         $.each(dat,function (i,vend) {
+                    //             $('#details .todetails').append('' +
+                    //                 '<li class="list-group-item"><b class="text-uppercase fs-4">Address:</b>'+ vend.buyer_address + ','+vend.city+'</li>' +
+                    //                 '')
+                    //         })
+                    //     }
+                    // })
+                }
+            })
+        })
     }
 </script>
 </body>

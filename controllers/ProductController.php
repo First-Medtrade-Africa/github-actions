@@ -158,6 +158,19 @@ class ProductController extends Controller
             return $statement->fetch(\PDO::FETCH_ASSOC);
         }
     }
+
+    private function approveProduct($id,$value)
+    {
+        $sql = "UPDATE `products` SET `products`.`approved` = ? WHERE `products`.`id` = ?";
+        $stmt = Application::$app->db->pdo->prepare($sql);
+        $stmt->execute([$value,$id]);
+        if($stmt->rowCount() == 0){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public function products(Request $request)
     {
 
@@ -167,6 +180,14 @@ class ProductController extends Controller
                 $subCat = $this->getSubCategories($_GET['txt']) ?? '';
                 return json_encode($subCat);
             }
+            
+            if(isset($_GET['approveProduct'])){
+                $id = $_GET['approveProduct'];
+                $val = 1;
+                $data = $this->approveProduct($id,$val);
+                return json_encode($data);
+            }
+
             if(isset($_GET['pid'])){
                 
                 $Catr = $this->getCatProduct($_GET['pid']) ?? '';

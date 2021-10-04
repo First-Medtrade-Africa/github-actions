@@ -297,6 +297,7 @@ use app\core\Application;
                     <th>Vendor Name</th>
                     <th>Date Created</th>
                     <th>Location</th>
+                    <th>Approved</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -304,16 +305,24 @@ use app\core\Application;
                 <?php foreach ($products as  $product){  ?>
                     <tr>
                         <td> <?php echo $product['productName']?></td>
-                        <td><?php echo $product['productPriceCurr'].' '.number_format($product['productPrice']) ?></td>
-                        <td><?php echo $product['minimumOrderQuantity']?></td>
+                        <td><?php  echo $product['productPriceCurr'].' '.number_format($product['productPrice']) ?></td>
+                        <td><?php  echo $product['minimumOrderQuantity']?></td>
                         <td> <?php echo $product['productDiscount']?>%</td>
-                        <td><?php echo  $product['storeName']?></td>
-                        <td><?php echo $product['dateCreated']?></td>
-                        <td><?php echo $product['vendors_city']?></td>
+                        <td><?php  echo  $product['storeName']?></td>
+                        <td><?php  echo $product['dateCreated']?></td>
+                        <td><?php  echo $product['vendors_city']?></td>
+                        <td><?= $product['approved'] === "1" ? '<i class=" badge badge-success">Approved</i>': '<i class="badge badge-danger">Not Approved</i>'  ?></td>
                         <td>
-                            <a href="/products?id=<?php echo $product['product_id']?>" class="btn btn-info btn-sm">Edit</a>
-                            <a href=" " data-id="<?= $product['product_id']?>" class="btn btn-danger btn-sm delbtn">Delete</a>
-
+                            
+                            <div class="btn-group">
+                                    <button type="button" class="btn btn-success btn-group-sm">Action</button>
+                                    <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="sr-only">Toggle Dropdown</span></button>
+                                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">
+                                        <li><a class="dropdown-item more"  href="/products?id=<?php echo $product['product_id']?>" >Edit</a></li>
+                                        <li><a class="dropdown-item delbtn" data-id="<?= $product['product_id']?>" href="#">Delete</a></li>
+                                        <li><a class="dropdown-item approvebtn" data-id="<?= $product['product_id']?>" href="#">Approve</a></li>
+                                    </ul>
+                            </div>
                         </td>
                     </tr>
                 <?php } ?>

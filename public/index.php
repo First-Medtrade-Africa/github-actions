@@ -20,11 +20,14 @@ use app\core\Application;
 
 $config = [
     'userClass' => \app\models\User::class,
+    'password'=>$_ENV['EMAIL_PASSWORD'],
+    'client'=>$_ENV['EMAIL_CLIENT'],
     'db'=>[
         'dsn'=>$_ENV['DB_DSN'],
         'user'=>$_ENV['DB_USER'],
         'password'=>$_ENV['DB_PASSWORD']
-    ]
+    ],
+    
 ];
 
 $app = new Application(dirname(__DIR__),$config);
