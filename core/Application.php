@@ -116,7 +116,7 @@ class Application
 
             $mail->setFrom('admin@firstmedtradeafrica.com','Amina');
             $mail->addAddress($email);
-            $mail->Subject = 'Your Order'.$orderId.'Has Being Placed.';
+            $mail->Subject = 'Your Order '.$orderId.' Has Being Placed.';
 
             $message = '
             <html>
