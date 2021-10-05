@@ -311,7 +311,7 @@ use app\core\Application;
                         <td><?php  echo  $product['storeName']?></td>
                         <td><?php  echo $product['dateCreated']?></td>
                         <td><?php  echo $product['vendors_city']?></td>
-                        <td><?= $product['approved'] === "1" ? '<i class=" badge badge-success">Approved</i>': '<i class="badge badge-danger">Not Approved</i>'  ?></td>
+                        <td><?= $product['product_approved'] === "1" ? '<i class=" badge badge-success">Approved</i>': '<i class="badge badge-danger">Not Approved</i>'  ?></td>
                         <td>
                             
                             <div class="btn-group">
