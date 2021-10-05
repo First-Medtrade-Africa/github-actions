@@ -161,7 +161,7 @@ class ProductController extends Controller
 
     private function approveProduct($id,$value)
     {
-        $sql = "UPDATE `products` SET `products`.`approved` = ? WHERE `products`.`id` = ?";
+        $sql = "UPDATE `products` SET `products`.`product_approved` = ? WHERE `products`.`id` = ?";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([$value,$id]);
         if($stmt->rowCount() == 0){
