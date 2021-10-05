@@ -303,7 +303,7 @@ $status='';
                 </thead>
                 <tbody>
                 <?php foreach ($products as  $product){  
-                    if( $product['approved'] == 1){
+                    if( $product['product_approved'] == 1){
                         $status = '<i class=" badge badge-success">Approved</i>';
                     }else{
                         
