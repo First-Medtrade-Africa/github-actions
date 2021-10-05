@@ -7,7 +7,7 @@ use app\core\Application;
 // echo '<pre>';
 // var_dump($singleData);
 // echo '</pre>';
-
+$status='';
 
 ?>
 
@@ -302,16 +302,26 @@ use app\core\Application;
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($products as  $product){  ?>
+                <?php foreach ($products as  $product){  
+                    if( $product['product_approved']=== 1){
+                        $status = '<i class=" badge badge-success">Approved</i>';
+                    }else{
+                        
+                        $status = '<i class="badge badge-danger">Not Approved</i>';
+                    }
+
+                    
+                    ?>
+
                     <tr>
                         <td> <?php echo $product['productName']?></td>
-                        <td><?php  echo $product['productPriceCurr'].' '.number_format($product['productPrice']) ?></td>
-                        <td><?php  echo $product['minimumOrderQuantity']?></td>
-                        <td> <?php echo $product['productDiscount']?>%</td>
-                        <td><?php  echo  $product['storeName']?></td>
-                        <td><?php  echo $product['dateCreated']?></td>
-                        <td><?php  echo $product['vendors_city']?></td>
-                        <td><?= $product['product_approved'] === 1 ? '<i class=" badge badge-success">Approved</i>': '<i class="badge badge-danger">Not Approved</i>'  ?></td>
+                        <td><?php  echo $product['productPriceCurr'].' '.number_format($product['productPrice']) ;?></td>
+                        <td><?php  echo $product['minimumOrderQuantity'];?></td>
+                        <td> <?php echo $product['productDiscount'];?>%</td>
+                        <td><?php  echo  $product['storeName'];?></td>
+                        <td><?php  echo $product['dateCreated'];?></td>
+                        <td><?php  echo $product['vendors_city'];?></td>
+                        <td><?php echo $status; ?></td>
                         <td>
                             
                             <div class="btn-group">

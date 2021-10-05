@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     protected function getProducts()
     {
-        $sql = "SELECT products.* ,vendors.storeName, vendors.`vendors_city`, products_details.* FROM products JOIN vendors JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`vendorId` = `vendors`.`id` AND `products`.`id` =`products_details`.`product_id`";
+        $sql = "SELECT `products`.* ,`vendors`.`storeName`, `vendors`.`vendors_city`, `products_details`.* FROM products JOIN vendors JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`vendorId` = `vendors`.`id` AND `products`.`id` =`products_details`.`product_id`";
         $statement = Application::$app->db->pdo->query($sql);
 
         if ($statement->rowCount() > 0){
