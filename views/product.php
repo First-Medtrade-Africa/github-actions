@@ -5,7 +5,7 @@ use app\core\Application;
 
 // echo $data;
 // echo '<pre>';
-var_dump($singleData);
+//var_dump($singleData);
 // echo '</pre>';
 $status='';
 
