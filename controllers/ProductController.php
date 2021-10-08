@@ -268,8 +268,9 @@ class ProductController extends Controller
 
 
         $product_id ='';
-        if(count($request->getBody())>1) {
-            $product_id = $request->getBody()['id'] ?? '';
+        if(isset($_GET['id'])) {
+
+            $product_id = $request->getBody()['id'];
             $getProductDetails = $this->getSingleProduct($product_id);
         }
         $this->setLayout('main');
