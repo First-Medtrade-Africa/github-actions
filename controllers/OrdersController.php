@@ -127,7 +127,7 @@ class OrdersController extends Controller{
     {
         $hashedpassword = password_hash($password,PASSWORD_DEFAULT);
 
-        $insert = "INSERT INTO `users` (`name`, `email`, `phone`, `password`, `role`, `verified`, `isDeleted`) VALUES (?,?,?,?,?,?,?)";
+        $insert = "INSERT INTO `users` (`name`, `email`, `phone`, `password`, `role`, `verified`, `is_deleted`) VALUES (?,?,?,?,?,?,?)";
         $stmt = Application::$app->db->pdo->prepare($insert);
         $stmt->execute([$name,$email, $phone,$hashedpassword, $role, $verified, $isdelete]);
         if($stmt){
