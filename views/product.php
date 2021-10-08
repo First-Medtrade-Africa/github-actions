@@ -72,7 +72,7 @@ $status='';
                                 <h3>Description</h3>
                                 <div class="form-group">
                                     <label for="proddes">Description</label>
-                                    <textarea required name="proddes"  id="proddes" class="form-control" rows="12" placeholder="Product description"><?php echo str_replace("\r\n", ' ',$singleData['productDescription']);?></textarea>
+                                    <textarea required name="proddes"  id="proddes" class="form-control" rows="12" placeholder="Product description"><?php echo strip_tags($singleData['productDescription']);?></textarea>
                                 </div>
 
                             </div>
