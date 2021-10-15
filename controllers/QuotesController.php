@@ -16,7 +16,7 @@ class QuotesController extends Controller{
 
 
     public function getQuotes(){
-        $get = "SELECT * FROM `quotations`";
+        $get = "SELECT `quotations`.* , `quotation_responses`.`request_id`, `quotation_responses`.`product_price`, `quotation_responses`.`transport_mode`, `quotation_responses`.`transport_cost`, `quotation_responses`.`total_weight`, `quotation_responses`.`shipping_terms`, `quotation_responses`.`clearing_cost`, `quotation_responses`.`trucking_cost`, `quotation_responses`.`total_cost`, `quotation_responses`.`currency`, `quotation_responses`.`lead_time`, `quotation_responses`.`replied` ,`vendors`.`storeName` FROM `quotations` JOIN `quotation_responses`,`vendors` WHERE `quotations`.`id`= `quotation_responses`.`request_id` AND `quotations`.`vendor_id`=`vendors`.`id` ";
         $stmt =  Application::$app->db->pdo->prepare($get);
         $stmt->execute([]);
 
@@ -28,7 +28,7 @@ class QuotesController extends Controller{
     }
 
     public function getQuotesById($id){
-        $get = "SELECT * FROM `quotations` WHERE id=?";
+        $get = "SELECT `quotations`.* , `quotation_responses`.`request_id`, `quotation_responses`.`product_price`, `quotation_responses`.`transport_mode`, `quotation_responses`.`transport_cost`, `quotation_responses`.`total_weight`, `quotation_responses`.`shipping_terms`, `quotation_responses`.`clearing_cost`, `quotation_responses`.`trucking_cost`, `quotation_responses`.`total_cost`, `quotation_responses`.`currency`, `quotation_responses`.`lead_time`, `quotation_responses`.`replied`,`vendors`.`storeName` FROM `quotations` JOIN `quotation_responses`,`vendors` WHERE `quotations`.`id`=? AND `quotations`.`id`= `quotation_responses`.`request_id` AND `quotations`.`vendor_id`=`vendors`.`id` ";
         $stmt =  Application::$app->db->pdo->prepare($get);
         $stmt->execute([$id]);
 

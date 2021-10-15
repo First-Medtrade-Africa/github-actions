@@ -33,7 +33,7 @@ class OrdersController extends Controller{
 
     protected function getProducts()
     {
-        $sql = "SELECT `products`.* ,`vendors`.`storeName`, `vendors`.`vendors_city`, `products_details`.* FROM products JOIN vendors JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`vendorId` = `vendors`.`id` AND `products`.`id` =`products_details`.`product_id`";
+        $sql = "SELECT `products`.* ,`vendors`.`storeName`, `vendors`.`vendors_city`, `products_details`.* FROM products JOIN vendors JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`vendor` = `vendors`.`storeName` AND `products`.`id` =`products_details`.`product_id`";
         $statement = Application::$app->db->pdo->query($sql);
 
         if ($statement->rowCount() > 0){
@@ -44,7 +44,7 @@ class OrdersController extends Controller{
 
     public function getOrders()
     {
-        $sql = "SELECT `orders`.*, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users`,products WHERE orders.userid = users.id AND orders.productid = products.id";
+        $sql = "SELECT `orders`.*, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendor` FROM `orders` JOIN `users`,products WHERE orders.userid = users.id AND orders.productid = products.id";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
@@ -65,7 +65,7 @@ class OrdersController extends Controller{
     }
     public function getSingleOrder($id)
     {
-        $sql = "SELECT `orders`.*, `vendors`.`address`, `vendors`.`vendors_city`, `vendors`.`storeName`, `vendors`.`bank`, `vendors`.`acctName`, `vendors`.`acctNo`, `vendors`.`acctType`, `buyersAddressBook`.`buyer_address`, `buyersAddressBook`.city, `buyersAddressBook`.state, `users`.name, `users`.email, `users`.phone, `products`.`productName`, `products`.`productPrice`, `products`.`minimumOrderQuantity`, `products`.`productPriceCurr`, `products`.`vendorId` FROM `orders` JOIN `users`, `products`, `buyersAddressBook`, `vendors` WHERE `orders`.id = ? AND `orders`.userid = `users`.id AND `orders`.productid = `products`.id AND `buyersAddressBook`.`user_id` = `orders`.`userid` AND `vendors`.`id` = `products`.`vendorId`";
+        $sql = "SELECT `orders`.*, `vendors`.`address`, `vendors`.`vendors_city`, `vendors`.`storeName`, `vendors`.`bank`, `vendors`.`acctName`, `vendors`.`acctNo`, `vendors`.`acctType`, `buyersAddressBook`.`buyer_address`, `buyersAddressBook`.city, `buyersAddressBook`.state, `users`.name, `users`.email, `users`.phone, `products`.`productName`, `products`.`productPrice`, `products`.`minimumOrderQuantity`, `products`.`productPriceCurr`, `products`.`vendor` FROM `orders` JOIN `users`, `products`, `buyersAddressBook`, `vendors` WHERE `orders`.id = ? AND `orders`.userid = `users`.id AND `orders`.productid = `products`.id AND `buyersAddressBook`.`user_id` = `orders`.`userid` AND `vendors`.`storeName` = `products`.`vendor`";
         // $sql = "SELECT `orders`.*, `buyersaddressbook`.`buyer_address`, `buyersaddressbook`.city, `buyersaddressbook`.state, `users`.name, `users`.email, `users`.phone, `products`.`productName`, `products`.`productPrice`, `products`.`minimumOrderQuantity`, `products`.`productPriceCurr`, `products`.`vendorId`, `vendors`.`storeName` FROM `orders` JOIN `users`, `products`, `buyersaddressbook`, `vendors` WHERE `orders`.id = 1 AND `users`.id = `orders`.userid AND `products`.id = `orders`.productid AND `buyersaddressbook`.`user_id` = `orders`.`userid` AND `vendors`.`id`=`products`.`vendorId`";
 
         $stmt = Application::$app->db->pdo->prepare($sql);
@@ -79,7 +79,7 @@ class OrdersController extends Controller{
     
     public function getSimilarOrder($id)
     {
-        $sql = "SELECT `orders`.*,`vendors`.`address`,`vendors`.`vendors_city`,`vendors`.`storeName`,`vendors`.`bank`,`vendors`.`acctName`,`vendors`.`acctNo`,`vendors`.`acctType`,`buyersAddressBook`.`buyer_address`,`buyersAddressBook`.city,`buyersAddressBook`.state, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users`,`products`,`buyersAddressBook`,`vendors` WHERE `orders`.orderId = ? AND `orders`.userid = `users`.id AND `orders`.productid = `products`.id AND `buyersAddressBook`.`user_id`= `orders`.`userid` AND vendors.id = products.vendorId";
+        $sql = "SELECT `orders`.*,`vendors`.`address`,`vendors`.`vendors_city`,`vendors`.`storeName`,`vendors`.`bank`,`vendors`.`acctName`,`vendors`.`acctNo`,`vendors`.`acctType`,`buyersAddressBook`.`buyer_address`,`buyersAddressBook`.city,`buyersAddressBook`.state, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendor` FROM `orders` JOIN `users`,`products`,`buyersAddressBook`,`vendors` WHERE `orders`.orderId = ? AND `orders`.userid = `users`.id AND `orders`.productid = `products`.id AND `buyersAddressBook`.`user_id`= `orders`.`userid` AND vendors.storeName = products.vendor";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([$id]);
         if ($stmt->rowCount() == 0) {

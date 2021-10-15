@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     protected function getProducts()
     {
-        $sql = "SELECT `products`.* ,`vendors`.`storeName`, `vendors`.`vendors_city`, `products_details`.* FROM products JOIN vendors JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`vendorId` = `vendors`.`id` AND `products`.`id` =`products_details`.`product_id`";
+        $sql = "SELECT `products`.* ,`vendors`.`storeName`, `vendors`.`vendors_city`, `products_details`.* FROM products JOIN vendors JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`vendor` = `vendors`.`storeName` AND `products`.`id` =`products_details`.`product_id`";
         $statement = Application::$app->db->pdo->query($sql);
 
         if ($statement->rowCount() > 0){
@@ -68,7 +68,7 @@ class ProductController extends Controller
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         }
     }
-    public function updateProduct($productName, $productPriceCurr, $productCategory, $productSubCategory, $productDiscount, $productPrice, $markup, $minimumOrderQuantity, $productSize, $productColor, $productWeight, $productModelNumber, $productDescription, $intheBox, $productShipped, $productDimension, $productShippedAddress, $productShippedCity, $productShippedPostal, $productShippedCountry, $productShippedHSC, $productId,$productInStock,$productVideo,$productionCountry,$productBrand,$productUnit){
+    public function updateProduct($productName, $productPriceCurr, $productCategory, $productSubCategory, $productDiscount, $productPrice, $minimumOrderQuantity, $productSize, $productColor, $productWeight, $productModelNumber, $productDescription, $intheBox, $productShipped, $productDimension, $productShippedAddress, $productShippedCity, $productShippedPostal, $productShippedCountry, $productShippedHSC, $productId,$productInStock,$productVideo,$productionCountry,$productBrand,$productUnit){
         try {
             $update =  "UPDATE `products`
                         SET `productName`=?,
@@ -77,7 +77,6 @@ class ProductController extends Controller
                             `productSubCategory`=?,
                             `productDiscount`=?,
                             `productPrice`=?,
-                            `markUp`=?,
                             `minimumOrderQuantity`=?,
                             `quantitySize` = ?,
                             `quantityInStock`=?,
@@ -85,7 +84,7 @@ class ProductController extends Controller
                             `productBrand`=?
                         WHERE `id`=?";
             $stmt = Application::$app->db->pdo->prepare($update);
-            $stmt->execute([$productName, $productPriceCurr, $productCategory, $productSubCategory,  $productDiscount, $productPrice, $markup, $minimumOrderQuantity,$productUnit,$productInStock,$productVideo,$productBrand,$productId ]);
+            $stmt->execute([$productName, $productPriceCurr, $productCategory, $productSubCategory,  $productDiscount, $productPrice, $minimumOrderQuantity,$productUnit,$productInStock,$productVideo,$productBrand,$productId ]);
             if($stmt){
                 $update = "UPDATE `products_details`
                 SET `productSize`=?,

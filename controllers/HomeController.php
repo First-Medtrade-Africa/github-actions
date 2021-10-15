@@ -25,7 +25,7 @@ class HomeController extends Controller
 
     protected function getProducts()
     {
-        $sql = "SELECT products.*,vendors.storeName,vendors.`vendors_city` FROM products LEFT JOIN vendors ON `products`.`vendorId` = `vendors`.`id`";
+        $sql = "SELECT products.*, vendors.storeName, vendors.`vendors_city` FROM products LEFT JOIN vendors ON `products`.`vendor` = `vendors`.`storeName`";
         $statement = Application::$app->db->pdo->query($sql);
 
         if ($statement->rowCount() > 0){

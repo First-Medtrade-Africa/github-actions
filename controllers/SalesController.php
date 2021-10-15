@@ -21,7 +21,7 @@ class SalesController extends Controller
 
     public function getOrders()
     {
-        $sql = "SELECT `orders`.*, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users` , `products` WHERE orders.userid = users.id AND orders.productid = products.id";
+        $sql = "SELECT `orders`.*, `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendor` FROM `orders` JOIN `users` , `products` WHERE orders.userid = users.id AND orders.productid = products.id";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
@@ -33,7 +33,7 @@ class SalesController extends Controller
 
     public function getSalesToday()
     {
-        $sql = "SELECT `orders`.* , `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users` , `products`  WHERE DAY(`orderDate`)  = CURDATE() AND orders.userid = users.id AND orders.productid = products.id";
+        $sql = "SELECT `orders`.* , `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendor` FROM `orders` JOIN `users` , `products`  WHERE DAY(`orderDate`)  = CURDATE() AND orders.userid = users.id AND orders.productid = products.id";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
@@ -45,7 +45,7 @@ class SalesController extends Controller
 
     public function getSalesMonth()
     {
-        $sql = "SELECT `orders`.* , `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users` , `products`  WHERE MONTH(`orderDate`)  = MONTH(CURDATE()) AND orders.userid = users.id AND orders.productid = products.id";
+        $sql = "SELECT `orders`.* , `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendor` FROM `orders` JOIN `users` , `products`  WHERE MONTH(`orderDate`)  = MONTH(CURDATE()) AND orders.userid = users.id AND orders.productid = products.id";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute();
         if ($stmt->rowCount() == 0) {
@@ -57,8 +57,8 @@ class SalesController extends Controller
 
     public function getSalesYear()
     {
-        $sql = "SELECT * FROM `orders` WHERE YEAR(`orderDate`)  = YEAR(CURDATE())";
-        $sql = "SELECT `orders`.* , `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendorId` FROM `orders` JOIN `users` , `products`  WHERE YEAR(`orderDate`)  = YEAR(CURDATE())AND orders.userid = users.id AND orders.productid = products.id";
+        // $sql = "SELECT * FROM `orders` WHERE YEAR(`orderDate`)  = YEAR(CURDATE())";
+        $sql = "SELECT `orders`.* , `users`.name,`users`.email,`users`.phone , `products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendor` FROM `orders` JOIN `users` , `products`  WHERE YEAR(`orderDate`)  = YEAR(CURDATE())AND orders.userid = users.id AND orders.productid = products.id";
 
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute();

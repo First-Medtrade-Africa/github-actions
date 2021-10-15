@@ -678,6 +678,7 @@ $first_part = $components[1];
             })
            
         })
+
         $('.approvebtn').click(function (e) 
         {
             e.preventDefault();
@@ -703,7 +704,8 @@ $first_part = $components[1];
                             )
                             setTimeout(function () {
                                 // Do something after 5 seconds
-                                getUsers()
+                                window.location.reload();
+                                return false;
                             }, 2000);
                         }
                     })
@@ -2138,20 +2140,34 @@ $first_part = $components[1];
                     $.each(data,function (i, val) {
                         date = new Date(val.timestamp)
                         date2 = new Date(val.deliveryDate)
-                        $('#Quotetable tbody').append(
-                            '<tr>' +
-                            '<td>'+date.toDateString()+'</td>' +
-                            '<td>'+val.name+'</td>' +
-                            '<td>'+val.email+'</td>' +
-                            '<td>'+val.phone+'</td>' +
-                            '<td>'+val.personType+'</td>' +
-                            '<td>'+val.productName+'</td>' +
-                            '<td>'+val.productQuantity+'</td>' +
-                            '<td>'+val.productSize+'</td>' +
-                            '<td>'+date2.toDateString()+'</td>' +
-                            '<td><a href="" class="btn btn-xs btn-success more" data-id="'+val.id+'" data-toggle="modal" data-target="#details" >More</a> </td>' +
-                            '</tr>' +
-                            ''
+                        // $('#Quotetable tbody').append(
+                        //     '<tr>' +
+                        //     '<td>'+date.toDateString()+'</td>' +
+                        //     '<td>'+val.name+'</td>' +
+                        //     '<td>'+val.email+'</td>' +
+                        //     '<td>'+val.phone+'</td>' +
+                        //     '<td>'+val.personType+'</td>' +
+                        //     '<td>'+val.productName+'</td>' +
+                        //     '<td>'+val.productQuantity+'</td>' +
+                        //     '<td>'+val.productSize+'</td>' +
+                        //     '<td>'+date2.toDateString()+'</td>' +
+                        //     '<td><a href="" class="btn btn-xs btn-success more" data-id="'+val.id+'" data-toggle="modal" data-target="#details" >More</a> </td>' +
+                        //     '</tr>' +
+                        //     ''
+                        // )
+
+                        $('.quotelist').append(
+                            '<a class="list-group-item list-group-item-action rounded-0 quoteitem" data-id="'+val.id+'">'+
+                                '<div class="media">'+
+                                    '<img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle">'+
+                                    '<div class="media-body ml-4">'+
+                                    '<div class="d-flex align-items-center justify-content-between mb-1">'+
+                                    '    <h6 class="mb-0">'+val.name+'</h6><small class="small font-weight-bold">'+date.toLocaleDateString('en-NG',{  day: 'numeric',month: 'short' })+'</small>'+
+                                    '</div>'+
+                                    '<p class="mb-0">'+val.storeName+'</p>'+
+                                   ' </div>'+
+                                '</div>'+
+                            '</a>'
                         )
                     })
                     initailize_data_table();
@@ -2159,8 +2175,7 @@ $first_part = $components[1];
             })
         }
 
-        getQuote();
-
+        
         $(document.body).on('click','.more',function (e) {
             e.preventDefault();
             $('#details .modal-body').empty()
@@ -2186,41 +2201,64 @@ $first_part = $components[1];
                             '</ul>'+
                             '')
                     })
-                    // $.ajax({
-                    //     url:'/orders?vd='+vendorid,
-                    //     type:'POST',
-                    //     success:function (result) {
-                    //         var data = JSON.parse(result)
-                            
-                    //         $.each(data,function (i,vend) {
-                    //             $('#details .fromDetails').append('' +
-                    //                     '<li class="list-group-item"><b class="text-uppercase fs-4">Name:</b>  ' + vend.name + '</li>' +
-                    //                     '<li class="list-group-item"><b class="text-uppercase fs-4">Phone:</b>  ' + vend.phone + '</li>' +
-                    //                     '<li class="list-group-item"><b class="text-uppercase fs-4">Email:</b>  ' +  vend.email   + '</li>' +
-                    //                 '')
-                    //         })
-                    //     }
-                    // })
-                    // console.log('buyer id= '+userid)
                     
-                    //  $.ajax({
-                    //     url:'/orders?ba='+ userid,
-                    //     type:'POST',
-                    //     success:function (result) {
-                    //         var dat = JSON.parse(result)
-                            
-                    //         console.log(dat)
-                            
-                    //         $.each(dat,function (i,vend) {
-                    //             $('#details .todetails').append('' +
-                    //                 '<li class="list-group-item"><b class="text-uppercase fs-4">Address:</b>'+ vend.buyer_address + ','+vend.city+'</li>' +
-                    //                 '')
-                    //         })
-                    //     }
-                    // })
                 }
             })
         })
+
+        $(document.body).on('click','.quoteitem',function (e) {
+            var id = $(this).data('id');
+            $('.chat-box').empty();
+            $.ajax({
+                url:'/quotes?pt='+id,
+                type:'POST',
+                success:function (result) {
+                    var data = JSON.parse(result)
+                    console.log(data)
+                    $.each(data,function (index,detail) {
+                        userid = detail.userid
+                        vendorid = detail.user_id
+                        date = new Date(detail.timestamp)
+                        date2 = new Date(detail.replied)
+                        
+                        $('.chat-box').append('' +
+                            '<div class="media w-50 mb-3">'+
+                            '<img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle">'+
+                            '<div class="media-body ml-3">'+
+                            '    <div class="bg-light rounded py-2 px-3 mb-2">'+
+                                 '<ul class=" " style="list-style:none">'+
+                                    '<li class=""><b class="">Name:</b>  '+ detail.name +'</li>'+
+                                    '<li class=""><b class="">Email:</b>  '+ detail.email +'</li>'+
+                                    '<li class=""><b class="">Phone:</b>  '+ detail.phone +'</li>'+
+                                    '<li class=""><b class="">Occupation:</b>  '+ detail.personType +'</li>'+
+                                 '</ul>'+
+                            '    </div>'+
+                            '    <p class="small text-muted">'+date.toLocaleDateString('en-NG',{  day: 'numeric',month: 'short' })+'</p>'+
+                            '</div>'+
+                            '</div>'
+                            )
+                            $('.chat-box').append('' +
+                            '<div class="media w-50 ml-auto mb-3">'+
+                            '<img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle">'+
+                            '<div class="media-body ml-3">'+
+                            '    <div class="bg-primary rounded py-2 px-3 mb-2">'+
+                                 '<ul class=" " style="list-style:none">'+
+                                    '<li class=""><b class="">Vendor Name:</b>  '+ detail.storeName+'</li>'+
+                                    '<li class=""><b class="">Product Name:</b>  '+ detail.productName +'</li>'+
+                                    '<li class=""><b class="">Quantity:</b>  '+ detail.productQuantity +'</li>'+
+                                    '<li class=""><b class="">Shipping:</b>  '+ detail.transport_cost +'</li>'+
+                                 '</ul>'+
+                            '    </div>'+
+                            '    <p class="small text-muted">'+date2.toLocaleDateString('en-NG',{  day: 'numeric',month: 'short' })+'</p>'+
+                            '</div>'+
+                            '</div>'
+                            )
+                    })
+                }
+            })
+        })
+        getQuote();
+
     }
 </script>
 </body>
