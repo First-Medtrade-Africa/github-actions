@@ -127,7 +127,22 @@ class UserController extends Controller
         if($stmt->rowCount() == 0){
             return false;
         }else{
-            return true;
+            $sql = "SELECT `name` ,`email` FROM `users` WHERE `users`.`id`= ? ";
+            $stmt = Application::$app->db->pdo->prepare($sql);
+            $stmt->execute([$id]);
+            if($stmt->rowCount() == 0){
+                return false;
+            }else{
+                $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                $name='';
+                $email='';
+                foreach($data as $key=>$val){
+                    $name = $val['name'];
+                    $email = $val['email'];
+                }
+                Application::$app->AccountApprovalEmail($name,$email);
+                return true;
+            }
         }
     }
     
@@ -229,7 +244,7 @@ class UserController extends Controller
                 $data = $this->approveSeller($id,$val);
                 return json_encode($data);
             }
-                        if(isset($_GET['approveManu'])){
+            if(isset($_GET['approveManu'])){
                 $id =$_GET['approveManu'];
                 $val = 1;
                 $data = $this->approveManu($id,$val);

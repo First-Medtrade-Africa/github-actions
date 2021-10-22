@@ -1619,7 +1619,7 @@ $first_part = $components[1];
             })
         })
         
-         $(document.body).on('click', '.manufactureredit', function () {
+        $(document.body).on('click', '.manufactureredit', function () {
             var id = $(this).data('id');
             $('#bankNames').empty();
             $('#bankNames').append('<option value="" disabled selected>Choose Preferred Bank</option>')
@@ -1752,6 +1752,7 @@ $first_part = $components[1];
 
 
     }
+    
     if(window.location.pathname == '/promotions'){
 
         function getCoupon() {
@@ -1947,6 +1948,7 @@ $first_part = $components[1];
 
         })
     }
+    
     if(window.location.pathname == '/markup'){
         function getMarkup(){
             $('#markupTable tbody').empty();
@@ -2106,6 +2108,7 @@ $first_part = $components[1];
         getExchange()
         getMarkup();
     }
+
     if(window.location.pathname == '/quotes'){
         var table_count = 0;
 
@@ -2140,21 +2143,7 @@ $first_part = $components[1];
                     $.each(data,function (i, val) {
                         date = new Date(val.timestamp)
                         date2 = new Date(val.deliveryDate)
-                        // $('#Quotetable tbody').append(
-                        //     '<tr>' +
-                        //     '<td>'+date.toDateString()+'</td>' +
-                        //     '<td>'+val.name+'</td>' +
-                        //     '<td>'+val.email+'</td>' +
-                        //     '<td>'+val.phone+'</td>' +
-                        //     '<td>'+val.personType+'</td>' +
-                        //     '<td>'+val.productName+'</td>' +
-                        //     '<td>'+val.productQuantity+'</td>' +
-                        //     '<td>'+val.productSize+'</td>' +
-                        //     '<td>'+date2.toDateString()+'</td>' +
-                        //     '<td><a href="" class="btn btn-xs btn-success more" data-id="'+val.id+'" data-toggle="modal" data-target="#details" >More</a> </td>' +
-                        //     '</tr>' +
-                        //     ''
-                        // )
+                        
 
                         $('.quotelist').append(
                             '<a class="list-group-item list-group-item-action rounded-0 quoteitem" data-id="'+val.id+'">'+
@@ -2164,7 +2153,7 @@ $first_part = $components[1];
                                     '<div class="d-flex align-items-center justify-content-between mb-1">'+
                                     '    <h6 class="mb-0">'+val.name+'</h6><small class="small font-weight-bold">'+date.toLocaleDateString('en-NG',{  day: 'numeric',month: 'short' })+'</small>'+
                                     '</div>'+
-                                    '<p class="mb-0">'+val.storeName+'</p>'+
+                                    '<p class="mb-0">'+val.manufacturer+'</p>'+
                                    ' </div>'+
                                 '</div>'+
                             '</a>'
@@ -2222,15 +2211,19 @@ $first_part = $components[1];
                         date2 = new Date(detail.replied)
                         
                         $('.chat-box').append('' +
-                            '<div class="media w-50 mb-3">'+
+                            '<div class="media w-70 mb-3">'+
                             '<img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle">'+
                             '<div class="media-body ml-3">'+
                             '    <div class="bg-light rounded py-2 px-3 mb-2">'+
                                  '<ul class=" " style="list-style:none">'+
-                                    '<li class=""><b class="">Name:</b>  '+ detail.name +'</li>'+
-                                    '<li class=""><b class="">Email:</b>  '+ detail.email +'</li>'+
-                                    '<li class=""><b class="">Phone:</b>  '+ detail.phone +'</li>'+
-                                    '<li class=""><b class="">Occupation:</b>  '+ detail.personType +'</li>'+
+                                    '<li class=""><b class="">Product Name:</b> '+ detail.productName  +'  </li>'+
+                                    '<li class=""><b class="">Description:</b> '+ detail.additional_info  +'</li>'+
+                                    '<li class=""><b class="">Customer Email:</b>  '+ detail.email +'</li>'+
+                                    '<li class=""><b class="">Customer Phone:</b>  '+ detail.phone +'</li>'+
+                                    '<li class=""><b class="">Customer Address:</b> '+ detail.address +', '+ detail.city +', '+ detail.country +'   </li>'+
+                                    '<li class=""><b class="">Customer Zip:</b> '+ detail.zip_code  +'  </li>'+
+                                    '<li class=""><b class="">Customer Type:</b> '+ detail.request_type  +'  </li>'+
+                                    '<li class=""><b class="">Customer Name:</b>  '+ detail.name +'</li>'+
                                  '</ul>'+
                             '    </div>'+
                             '    <p class="small text-muted">'+date.toLocaleDateString('en-NG',{  day: 'numeric',month: 'short' })+'</p>'+
@@ -2241,13 +2234,15 @@ $first_part = $components[1];
                             '<div class="media w-50 ml-auto mb-3">'+
                             '<img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle">'+
                             '<div class="media-body ml-3">'+
-                            '    <div class="bg-primary rounded py-2 px-3 mb-2">'+
+                            '<div class="bg-primary rounded py-2 px-3 mb-2">'+
                                  '<ul class=" " style="list-style:none">'+
-                                    '<li class=""><b class="">Vendor Name:</b>  '+ detail.storeName+'</li>'+
-                                    '<li class=""><b class="">Product Name:</b>  '+ detail.productName +'</li>'+
-                                    '<li class=""><b class="">Quantity:</b>  '+ detail.productQuantity +'</li>'+
-                                    '<li class=""><b class="">Shipping:</b>  '+ detail.transport_cost +'</li>'+
+                                    '<li class=""><b class="">Vendor Name:</b>' +  detail.manufacturer   +'</li>'+
+                                    '<li class=""><b class="">Product Name:</b>' + detail.productName +'</li>'+
+                                    '<li class=""><b class="">Quantity:</b>'+  detail.productQuantity +'</li>'+
+                                    '<li class=""><b class="">Shipping:</b>'+   detail.transport_cost +'</li>'+
                                  '</ul>'+
+
+                                 '<div><a href="" data-vid="'+ detail.vendor_id+'" data-id="'+ detail.id+'" class="btn btn-block btn-info confirm_Payment">Confirm Payment</a></div>'+
                             '    </div>'+
                             '    <p class="small text-muted">'+date2.toLocaleDateString('en-NG',{  day: 'numeric',month: 'short' })+'</p>'+
                             '</div>'+
@@ -2257,6 +2252,42 @@ $first_part = $components[1];
                 }
             })
         })
+
+        $(document.body).on('click','.confirm_Payment',function(e){
+
+            e.preventDefault();
+            Swal.fire({
+                title:  "You are About to Confirm this Payment For this Quote",
+                showDenyButton: true,
+                showCancelButton: true,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                denyButtonText: `Cancel`,
+                confirmButtonText: 'Yes, Confirm Payment!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var id = $(this).data('id')
+                    console.log("quote ID: ",id);
+
+                    $.ajax({
+                        url: '/quotes?quoteid='+ id,
+                        type: 'POST',
+                        success: function (res) {
+                            console.log(res);
+                            Swal.fire(
+                                'Payment Confirmed!',
+                                'Payment Confirmed Successfully',
+                                'success'
+                            )
+
+                        }            
+                    })
+
+                }           
+            })
+        })
+        
         getQuote();
 
     }

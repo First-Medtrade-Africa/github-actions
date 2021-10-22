@@ -298,6 +298,7 @@ $status='';
                     <th>Date Created</th>
                     <th>Location</th>
                     <th>Approved</th>
+                    <th>Type</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -321,7 +322,9 @@ $status='';
                         <td><?php  echo  $product['storeName'];?></td>
                         <td><?php  echo $product['dateCreated'];?></td>
                         <td><?php  echo $product['vendors_city'];?></td>
+                        
                         <td><?php echo $status; ?></td>
+                        <td><?php echo $product['vendor_type'];?></td>
                         <td>
                             
                             <div class="btn-group">

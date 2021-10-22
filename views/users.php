@@ -199,7 +199,6 @@
                  </div>
                  <div class="modal-body">
                      <div class="row">
-
                         <div class="col-6">
                             <h5>Name : <small class="vendorName"></small>       </h5>
                             <h5>Store Name : <small class="vendorStore"></small>  </h5>
