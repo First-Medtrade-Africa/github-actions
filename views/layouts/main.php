@@ -729,7 +729,7 @@ $first_part = $components[1];
                         var badge = ''
                         var currency = ''
                         switch (status) {
-                            case 'Pending Confirmation':
+                            case 'Awaiting Confirmation':
                                 badge = 'badge-secondary';
                                 break;
                             case 'Order Placed':
@@ -738,7 +738,7 @@ $first_part = $components[1];
                             case 'Shipping':
                                 badge = 'badge-info';
                                 break;
-                            case 'Delivery In Progress':
+                            case 'Delivery in Progress':
                                 badge = 'badge-warning';
                                 break;
                             case 'Delivery Done':
@@ -1135,8 +1135,8 @@ $first_part = $components[1];
                 '<div class="form-group" >'+
                     '<select type="text" class="form-control" data-id="'+id+'">'+
                         '<option value="" disabled selected>Choose Status</option>'+
-                        '<option value="Pending Confirmation">Pending Confirmation</option>' +
-                        '<option value=Other Placed">Other Placed</option>' +
+                        '<option value="Awaiting Confirmation">Awaiting Confirmation</option>' +
+                        '<option value="Order Placed">Order Placed</option>' +
                         '<option value="Shipping">Shipping</option>' +
                         '<option value="Delivery in Progress">Delivery in Progress</option>' +
                         '<option value="Delivery Done">Delivery Done</option>' +
