@@ -151,14 +151,34 @@ class UserController extends Controller
         $sql = "UPDATE `manufacturers` SET `manufacturers`.`approved` = ? WHERE `manufacturers`.`user_id` = ?";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([$value,$id]);
+
         if($stmt->rowCount() == 0){
-            return false;
+            return false;         
         }else{
+            $sql = "SELECT `manufacturers`.*, `users`.`name` ,`users`.`email` FROM `manufacturers` JOIN `users` WHERE `manufacturers`.`user_id`= ? AND `users`.`id` = `manufacturers`.`user_id` ";
+            $stmt = Application::$app->db->pdo->prepare($sql);
+            $stmt->execute([$id]);
+
+            if($stmt->rowCount() == 0){
+                return false;
+            }else{
+                $data = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+                $name='';
+                $email='';
+                
+                foreach($data as $key=>$val){
+                    $name = $val['name'];
+                    $email = $val['email'];
+                }
+
+                Application::$app->AccountApprovalEmail($name,$email);
+            }
+
             return true;
         }
     }
     
-       public function getManById($id)
+    public function getManById($id)
     {
         $sql = "SELECT `users`.*,`manufacturers`.`manufacturer`,`manufacturers`.`postal_code`,`manufacturers`.`manufacturer_city`,`manufacturers`.`country`,`manufacturers`.`bank`,`manufacturers`.`acctNo`,`manufacturers`.`acctName`,`manufacturers`.`acctType`FROM `users` JOIN `manufacturers` WHERE `users`.`id` = ? AND `manufacturers`.`user_id` = `users`.`id`";
         $stmt = Application::$app->db->pdo->prepare($sql);

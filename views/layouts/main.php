@@ -713,6 +713,19 @@ $first_part = $components[1];
             })
         })
 
+        $('#addProductForm').submit(function(e){
+            e.preventDefault();
+            var data = $(this).serialize();
+            console.log(data);
+            $.ajax({
+                url: '/products?'+data,
+                type: 'POST',
+                success: function (result) {
+                    console.log(result);
+                }
+            })
+        })
+
     }
     if(window.location.pathname == '/orders'){
 
@@ -1182,10 +1195,66 @@ $first_part = $components[1];
 
     if(window.location.pathname == '/users'){
         var bankCode = '';
+        var table_count_1 = 0;
+        var table_count_2 = 0;
+        var table_count_3 = 0;
+
+        function initailize_data_table_1(){
+            if(table_count_1 === 0){
+                $('#sellertable').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                });                
+            } else {
+                table_count_1 = 1;
+            }
+        }
+
+        function initailize_data_table_2(){
+
+            if(table_count_2 === 0){
+               $('#buyertable').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                });
+
+            } else {
+                table_count_2 = 1;
+            }
+        }
+        function initailize_data_table_3(){
+
+            if(table_count_3 === 0){
+          
+                $('#Manufacturers').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                });
+            } else {
+                table_count_3= 1;
+            }
+        }
+
         function getUsers() {
             $('#sellertable tbody').empty();
             $('#buyertable tbody').empty();
             $('#Manufacturers tbody').empty();
+
             $.ajax({
                 url: "/users?buyer=22",
                 type: "POST",
@@ -1207,18 +1276,10 @@ $first_part = $components[1];
                             '')
 
                     })
-
-                    $('#buyertable').DataTable({
-                        "paging": true,
-                        "lengthChange": false,
-                        "searching": true,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": false,
-                        "responsive": true,
-                    })
+                    initailize_data_table_1()
                 }
             })
+
             $.ajax({
                 url: "/users?seller=22",
                 type: "POST",
@@ -1261,18 +1322,11 @@ $first_part = $components[1];
                             '')
 
                     })
-                    $('#sellertable').DataTable({
-                        "paging": true,
-                        "lengthChange": true,
-                        "searching": true,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": true,
-                        "responsive": true,
-                    })
+                    initailize_data_table_2()
                 }
 
             })
+
             $.ajax({
                 url: "/users?unseller=22",
                 type: "POST",
@@ -1300,6 +1354,7 @@ $first_part = $components[1];
                 }
 
             })
+
             $.ajax({
                 url:"/users?manufacturers=22",
                 type:"POST",
@@ -1339,10 +1394,13 @@ $first_part = $components[1];
                             '')
 
                     })
+                    initailize_data_table_3()
                 }
             })
             
+
         }
+
         function validateAccount(bankcode,account){
             axios.post('https://api.ravepay.co/flwv3-pug/getpaidx/api/resolve_account', {
                 PBFPubKey:"FLWPUBK-e2d297d745f5db71268af0f79e8e2332-X",
@@ -1355,6 +1413,7 @@ $first_part = $components[1];
                 console.log(error);
             });
         }
+        
         function getBankByCode(code){
             
             let request = axios.get('https://api.ravepay.co/v2/banks/NG?public_key=FLWPUBK-e2d297d745f5db71268af0f79e8e2332-X');
@@ -1375,6 +1434,7 @@ $first_part = $components[1];
             });
 
         }
+        
         getUsers();
 
         $(document.body).on('click', '.selleredit', function () {
@@ -1950,6 +2010,7 @@ $first_part = $components[1];
     }
     
     if(window.location.pathname == '/markup'){
+        
         function getMarkup(){
             $('#markupTable tbody').empty();
             $.ajax({
@@ -1983,6 +2044,7 @@ $first_part = $components[1];
                 }
             })
         }
+
         function getExchangeById(id){
             $('.markupInput').val('');
             $.ajax({
@@ -1994,8 +2056,8 @@ $first_part = $components[1];
                     $('.ex_id').val(data[0].id);
                     $('.buycurrency').val(data[0].currency);
                     $('.sellcurrency').val(data[0].x_currency);
-                    $('.rate').val(data[0].rate);
-                    $('.inverserate').val(data[0].inverse_rate);
+                    $('.inverserate').val(data[0].rate);
+                    $('.rate ').val(data[0].inverse_rate);
                 }
             })
         }
@@ -2018,6 +2080,7 @@ $first_part = $components[1];
                 }
             })
         }
+        
         function getExchange(){
             $('#exchangeTable tbody').empty();
             $.ajax({
@@ -2039,6 +2102,7 @@ $first_part = $components[1];
                 }
             })
         }
+        
         function addCurrency(data){
             $.ajax({
                 url:'/markup?'+data,
@@ -2049,6 +2113,7 @@ $first_part = $components[1];
                 }
             })
         }
+        
         function editCurrency(data){
             $.ajax({
                 url:'/markup?'+data,
@@ -2067,11 +2132,13 @@ $first_part = $components[1];
                 }
             })
         }
+        
         $(document.body).on('click','.editmarkupbtn',function () {
             var id = $(this).data('id');
             console.log(id)
             getMarkupById(id)
         })
+        
         $(document.body).on('click','.editexchangebtn',function () {
             var id = $(this).data('id');
             console.log(id)
@@ -2083,16 +2150,18 @@ $first_part = $components[1];
             var data = $(this).serialize();
             updateMarkup(data)
         })
+
         function getInverseRate(rate){
             var inverseVal = 1/rate;
             return inverseVal;
         }
 
-        $('.rate').on('keyup',function () {
+        $('.inverserate').on('keyup',function () {
             let rate = $(this).val();
-            $('.inverserate').val(getInverseRate(rate));
+            $('.rate').val(getInverseRate(rate));
             console.log(getInverseRate(rate))
         })
+
         $('#AddExchangeRate').on('submit',function (e) {
             e.preventDefault()
             var data = $(this).serialize();

@@ -38,6 +38,7 @@ class ProductController extends Controller
             return $statement->fetch(\PDO::FETCH_ASSOC);
         }
     }
+
     public function getCatProduct($id)
     {
         $sql = "SELECT productCategory,productSubCategory FROM `products` WHERE `products`.`id` = ?" ;
@@ -47,6 +48,7 @@ class ProductController extends Controller
             return $statement->fetch(\PDO::FETCH_ASSOC);
         }
     }
+
     public function getCategories(){
         $get = "SELECT `id`, `cat_img`, `cat_name` FROM `product_categories`";
         $stmt =  Application::$app->db->pdo->prepare($get);
@@ -58,6 +60,7 @@ class ProductController extends Controller
             return $data;
         }
     }
+    
     public function getSubCategories($categoryId){
         $get = "SELECT `id`, `categoryId`, `subCategories` FROM `product_subCategories` WHERE categoryId = ?";
         $stmt = Application::$app->db->pdo->prepare($get);
@@ -68,21 +71,10 @@ class ProductController extends Controller
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         }
     }
+    
     public function updateProduct($productName, $productPriceCurr, $productCategory, $productSubCategory, $productDiscount, $productPrice, $minimumOrderQuantity, $productSize, $productColor, $productWeight, $productModelNumber, $productDescription, $intheBox, $productShipped, $productDimension, $productShippedAddress, $productShippedCity, $productShippedPostal, $productShippedCountry, $productShippedHSC, $productId,$productInStock,$productVideo,$productionCountry,$productBrand,$productUnit){
         try {
-            $update =  "UPDATE `products`
-                        SET `productName`=?,
-                            `productPriceCurr`=?,
-                            `productCategory`=?,
-                            `productSubCategory`=?,
-                            `productDiscount`=?,
-                            `productPrice`=?,
-                            `minimumOrderQuantity`=?,
-                            `quantitySize` = ?,
-                            `quantityInStock`=?,
-                            `productVideo`=?,
-                            `productBrand`=?
-                        WHERE `id`=?";
+            $update =  "UPDATE `products` SET `productName`=?,`productPriceCurr`=?,`productCategory`=?,`productSubCategory`=?,`productDiscount`=?,`productPrice`=?,`minimumOrderQuantity`=?,`quantitySize` = ?,`quantityInStock`=?,`productVideo`=?,`productBrand`=? WHERE `id`=?";
             $stmt = Application::$app->db->pdo->prepare($update);
             $stmt->execute([$productName, $productPriceCurr, $productCategory, $productSubCategory,  $productDiscount, $productPrice, $minimumOrderQuantity,$productUnit,$productInStock,$productVideo,$productBrand,$productId ]);
             if($stmt){
@@ -102,10 +94,10 @@ class ProductController extends Controller
                     `productShippedHSC`=?,
                     `productionCountry`=?
                 WHERE `product_id`=?";
-                $stmt = Application::$app->db->pdo->prepare($update);
-                $stmt->execute([$productSize,  $productColor, $productWeight, $productModelNumber, $productDescription, $intheBox,$productShipped, $productDimension, $productShippedAddress, $productShippedCity, $productShippedPostal, $productShippedCountry, $productShippedHSC,$productionCountry, $productId]);
+                $stmt2 = Application::$app->db->pdo->prepare($update);
+                $stmt2->execute([$productSize,  $productColor, $productWeight, $productModelNumber, $productDescription, $intheBox,$productShipped, $productDimension, $productShippedAddress, $productShippedCity, $productShippedPostal, $productShippedCountry, $productShippedHSC,$productionCountry, $productId]);
             }
-            return true;
+            return $stmt ;
         } catch(PDOException $e){
             echo "Failed! <br>" . $e->getMessage();
             return false;
@@ -192,15 +184,18 @@ class ProductController extends Controller
                 $Catr = $this->getCatProduct($_GET['pid']) ?? '';
                 return json_encode($Catr);
             }
+
             if(isset($_GET['country'])){
                 $input ="%{$_GET['country']}%";
                 $Catj = $this->getCountries($input) ?? '';
                 return json_encode($Catj);
             }
+
             if(isset($_GET['cty'])){
                 $dat = $this->getCities($_GET['cty']) ?? '';
                 return json_encode($dat);
             }
+
             if(isset($_GET['hsc'])){
                 $ppp = "%{$_GET['hsc']}%";
                 $hsc = $this->getHsc($ppp) ?? '';
@@ -212,63 +207,63 @@ class ProductController extends Controller
                 return $req;
             }
             
-            
-            $productId              =         $request->getBody()['prodId'];
-            $productName            =         $request->getBody()['prodName'];//
-            $productBrand           =         $request->getBody()['prodbrand'];
-            $productCatId           =         $request->getBody()['prodcategory'] ?? '';
-            $intheBox               =         $request->getBody()['intheBox'];
-            $productSubCatId        =         $request->getBody()['productSubCategory'] ?? '';
-            $productColor           =         $request->getBody()['prodcolor'];
-            $productDescription     =         $request->getBody()['proddes'];
-            $productManufacture     =         $request->getBody()['productManufacture'] ?? '';
-            $productRating          =         $request->getBody()['productRating'] ?? '';
-            $productmodelNo         =         $request->getBody()['prodbatch'];
-            $productWeight          =         $request->getBody()['prodweight'].' kg';
-            $productShipped         =         $request->getBody()['prodshipped'];
-            $productPrice           =         $request->getBody()['prodprice'];
-            $productPriceCurr       =         $request->getBody()['curr'];
-            $productionCountry      =         $request->getBody()['prodcountry'];
-            $productOrderQuantity   =         $request->getBody()['prodmoq'];
-            $productVideo           =         $request->getBody()['prodvid'];
-            $productInStock         =         $request->getBody()['prodInStock'];
-            $productUnit            =         $request->getBody()['qty'] ;
-            $productSize            =         $request->getBody()['prodSizedcat'].'-'.$request->getBody()['prodsize'] ?? '';
-            $prodDisc               =         $request->getBody()['priceDiscount'];
-
-            if($productShipped == 'Yes'){
-                $markup = 20;
-                $productHeight = $request->getBody()['prodheight'];
-                $productWidth = $request->getBody()['prodwidth'];
-                $productLength = $request->getBody()['prodlenght'] ;
-
-                $productDimension = $productLength.'x'.$productWidth.'x'.$productHeight;
-
-                $productShippedAddress  = $request->getBody()['productShippedAddress'];
-                $productShippedCity     = $request->getBody()['productShippedCity'];
-                $productShippedPostal   = $request->getBody()['productShippedPostal'];
-                $productShippedCountry  = $request->getBody()['productShippedCountry'];
-                $productShippedHSC      = $request->getBody()['productShippedHSC'];
-
-            }else{
-                $markup = 10;
-                $productHeight = '';
-                $productWidth = '';
-                $productLength = '' ;
-                $productDimension = $productLength.'x'.$productWidth.'x'.$productHeight;
-            }
-
-            $stat = $this->updateProduct($productName,$productPriceCurr,$productCatId,$productSubCatId,$prodDisc,$productPrice,$markup,$productOrderQuantity,$productSize,$productColor,$productWeight,$productmodelNo,$productDescription,$intheBox,$productShipped,$productDimension, $productShippedAddress, $productShippedCity, $productShippedPostal, $productShippedCountry, $productShippedHSC, $productId,$productInStock,$productVideo,$productionCountry,$productBrand,$productUnit  );
-            if($stat){
-                Application::$app->response->redirect('/products');
-            }
+            if(isset($_GET['prodId'])){
+                $productId              =         $_GET['prodId'];
+                $productName            =         $_GET['prodName'];
+                $productBrand           =         $_GET['prodbrand'];
+                $productCatId           =         $_GET['prodcategory'] ?? '';
+                $intheBox               =         $_GET['intheBox'];
+                $productSubCatId        =         $_GET['productSubCategory'] ?? '';
+                $productColor           =         $_GET['prodcolor'];
+                $productDescription     =         $_GET['proddes'];
+                $productManufacture     =         $_GET['productManufacture'] ?? '';
+                $productRating          =         $_GET['productRating'] ?? '';
+                $productmodelNo         =         $_GET['prodbatch'];
+                $productWeight          =         $_GET['prodweight'].' kg';
+                $productShipped         =         $_GET['prodshipped'];
+                $productPrice           =         $_GET['prodprice'];
+                $productPriceCurr       =         $_GET['curr'];
+                $productionCountry      =         $_GET['prodcountry'];
+                $productOrderQuantity   =         $_GET['prodmoq'];
+                $productVideo           =         $_GET['prodvid'];
+                $productInStock         =         $_GET['prodInStock'];
+                $productUnit            =         $_GET['qty'] ;
+                $productSize            =         $_GET['prodSizedcat'] ?? ''.'-'.$_GET['prodsize'] ?? '';
+                $prodDisc               =         $_GET['priceDiscount'];
+                if($productShipped == 'Yes'){
+                    $markup = 20;
+                    $productHeight =  $_GET['prodheight'];
+                    $productWidth =  $_GET['prodwidth'];
+                    $productLength =  $_GET['prodlenght'] ;
+    
+                    $productDimension = $productLength.'x'.$productWidth.'x'.$productHeight;
+    
+                    $productShippedAddress  =  $_GET['productShippedAddress'];
+                    $productShippedCity     =  $_GET['productShippedCity'] ?? '';
+                    $productShippedPostal   =  $_GET['productShippedPostal'];
+                    $productShippedCountry  =  $_GET['productShippedCountry'];
+                    $productShippedHSC      =  $_GET['productShippedHSC'];
+    
+                }else{
+                    $markup = 10;
+                    $productHeight = '';
+                    $productWidth = '';
+                    $productLength = '' ;
+                    $productDimension = $productLength.'x'.$productWidth.'x'.$productHeight;
+                }
+    
+                $stat = $this->updateProduct($productName,$productPriceCurr,$productCatId,$productSubCatId,$prodDisc,$productPrice,$markup,$productOrderQuantity,$productSize,$productColor,$productWeight,$productmodelNo,$productDescription,$intheBox,$productShipped,$productDimension, $productShippedAddress, $productShippedCity, $productShippedPostal, $productShippedCountry, $productShippedHSC, $productId,$productInStock,$productVideo,$productionCountry,$productBrand,$productUnit  );
+                if($stat){
+                    return $stat;
+                    // Application::$app->response->redirect('/products');
+                }
+            } 
         }
 
 
 
         $product_id ='';
         if(isset($_GET['id'])) {
-
             $product_id = $request->getBody()['id'];
             $getProductDetails = $this->getSingleProduct($product_id);
         }

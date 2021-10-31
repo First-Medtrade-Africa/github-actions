@@ -61,8 +61,8 @@ class QuotesController extends Controller{
                 $vendorStoreEmail = $vendor['email'];
             }
                       
-            Application::$app->ManConfirmPaymentEmail($vendorStoreName,$vendorStoreEmail);  
             return $stmt;
+            Application::$app->ManConfirmPaymentEmail($vendorStoreName,$vendorStoreEmail);  
         }else{
             return true;
         }        

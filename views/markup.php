@@ -109,17 +109,18 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="" class="col-sm-4 col-form-label">Rate</label>
-                            <div class="col-sm-8">
-                                <input type="number" name="erate" class="form-control rate">
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label for="" class="col-sm-4 col-form-label">Inverse Rate</label>
                             <div class="col-sm-8">
                                 <input type="text" name="einverse"  class="form-control inverserate" >
                             </div>
                         </div>
+                        <div class="form-group row">
+                            <label for="" class="col-sm-4 col-form-label">Rate</label>
+                            <div class="col-sm-8">
+                                <input type="text" name="erate" class="form-control rate">
+                            </div>
+                        </div>
+
                         <div class="form-group row">
                             <div class="col-sm-12">
                                 <button type="submit" class="btn btn-success btn-primary float-right">Edit Rate</button>

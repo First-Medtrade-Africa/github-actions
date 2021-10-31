@@ -74,7 +74,7 @@ class MarkUpController extends Controller
     public function addExchange($rate,$inverserate,$currency,$xch){
         $get = "INSERT INTO `exchange_rate`(`currency`, `inverse_rate`, `rate`, `x_currency`) VALUES (?,?,?,?)";;
         $stmt =  Application::$app->db->pdo->prepare($get);
-        $stmt->execute([$currency,$inverserate,$rate,$xch]);
+        $stmt->execute([$currency,$rate,$inverserate,$xch]);
         if($stmt->rowCount() == 0){
             return false;
         }else{
