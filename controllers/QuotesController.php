@@ -15,8 +15,19 @@ class QuotesController extends Controller{
     }
 
 
-    public function getQuotes(){
-        $get = "SELECT `quotations`.* , `quotation_responses`.`request_id`, `quotation_responses`.`product_price`, `quotation_responses`.`transport_mode`, `quotation_responses`.`transport_cost`, `quotation_responses`.`total_weight`, `quotation_responses`.`shipping_terms`, `quotation_responses`.`clearing_cost`, `quotation_responses`.`trucking_cost`, `quotation_responses`.`total_cost`, `quotation_responses`.`currency`, `quotation_responses`.`lead_time`, `quotation_responses`.`replied` ,`manufacturers`.`manufacturer` FROM `quotations` JOIN `quotation_responses`,`manufacturers` WHERE `quotations`.`id`= `quotation_responses`.`request_id` AND `quotations`.`vendor_id`=`manufacturers`.`id` ";
+    public function getQuotesM(){
+        $get = "SELECT `quotations`.* , `quotation_responses`.`request_id`, `quotation_responses`.`product_price`, `quotation_responses`.`transport_mode`, `quotation_responses`.`transport_cost`, `quotation_responses`.`total_weight`, `quotation_responses`.`shipping_terms`, `quotation_responses`.`clearing_cost`, `quotation_responses`.`trucking_cost`, `quotation_responses`.`total_cost`, `quotation_responses`.`currency`, `quotation_responses`.`lead_time`, `quotation_responses`.`replied` ,`manufacturers`.`manufacturer` FROM `quotations` JOIN `quotation_responses`,`manufacturers` WHERE `quotations`.`request_type`='Message' AND `quotations`.`id`= `quotation_responses`.`request_id` AND `quotations`.`vendor_id`=`manufacturers`.`id`";
+        $stmt =  Application::$app->db->pdo->prepare($get);
+        $stmt->execute([]);
+
+        if($stmt->rowCount() == 0){
+            return false;
+        }else{
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        }
+    }
+    public function getQuotesN(){
+        $get = "SELECT `quotations`.*,`vendors`.`storeName`,`vendors`.`address`,`vendors`.`vendors_city`,`vendors`.`country`,`products`.`productName`,`products`.`productPrice`,`products`.`productPriceCurr`,`products_details`.`productShipped` FROM `quotations` JOIN `vendors`,`products`,`products_details` WHERE `quotations`.`request_type`='Normal' AND `vendors`.`id` = `quotations`.`vendor_id` AND `products`.`productName` = `quotations`.`productName` AND `products_details`.`product_id` = `products`.`id`";
         $stmt =  Application::$app->db->pdo->prepare($get);
         $stmt->execute([]);
 
@@ -86,7 +97,12 @@ class QuotesController extends Controller{
             
             if(isset($_GET['gq'])){
 
-                $data = $this->getQuotes();
+                $data = $this->getQuotesM();
+                return json_encode($data); 
+            }
+            if(isset($_GET['nm'])){
+
+                $data = $this->getQuotesN();
                 return json_encode($data); 
             }
             if(isset($_GET['pt'])){
@@ -136,7 +152,7 @@ class QuotesController extends Controller{
             
         }
         
-        $data = $this->getQuotes();
+        $data = $this->getQuotesM();
 
         $this->setLayout('main');
         return $this->render('quotes',[

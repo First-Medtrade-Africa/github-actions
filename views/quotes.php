@@ -2,7 +2,6 @@
 
 <div class="row mb-4">
     <div class="col-12">
-        <button class="btn btn-primary float-right createorder" data-toggle="modal" data-target="#createOrder">Create New Order</button>
     </div>
 </div>
 <!-- 
@@ -79,56 +78,58 @@
     </div>
 </div>
 
-<div class="row rounded-lg overflow-hidden shadow">
-    <!-- Users box-->
-    <div class="col-3 px-0">
-      <div class="bg-white">
+<div class="card card-primary card-outline card-tabs">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="custom-tabs-three-home-tab" data-toggle="pill" href="#custom-tabs-three-home" role="tab" aria-controls="custom-tabs-three-home" aria-selected="true">Vendor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="custom-tabs-three-profile-tab" data-toggle="pill" href="#custom-tabs-three-profile" role="tab" aria-controls="custom-tabs-three-profile" aria-selected="false">Manufacturers</a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-three-tabContent">
+                    <div class="tab-pane fade active show" id="custom-tabs-three-home" role="tabpanel" aria-labelledby="custom-tabs-three-home-tab" >
+                        <table class="Normal table table-responsive-lg table-striped table-hover ">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Email</th>
+                              <th>Phone</th>
+                              <th>Address</th>
+                              <th>Product</th>
+                              <th>Quantity</th>
+                              <th>Price</th>
+                              <th>Foriegn</th>
+                              <th>Action</th>
+                            </tr>
+                          </thead>
+                          <tbody>
 
-        <div class="bg-gray px-4 py-2 bg-light">
-          <p class="h5 mb-0 py-1">Recent</p>
-        </div>
+                          </tbody>
+                        </table>
+                    </div>
+                    <div class="tab-pane fade" id="custom-tabs-three-profile" role="tabpanel" aria-labelledby="custom-tabs-three-profile-tab">
+                    <div class="row rounded-lg overflow-hidden shadow">
+                          <!-- Users box-->
+                          <div class="col-3 px-0">
+                            <div class="bg-white">
+                              <div class="bg-gray px-4 py-2 bg-light">
+                                <p class="h5 mb-0 py-1">Recent</p>
+                              </div>
+                              <div class="messages-box">
+                                <div class="list-group rounded-0 quotelist">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-        <div class="messages-box">
-          <div class="list-group rounded-0 quotelist">
-
-            <!-- <a class="list-group-item list-group-item-action active text-white rounded-0">
-              <div class="media"><img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle">
-                <div class="media-body ml-4">
-                  <div class="d-flex align-items-center justify-content-between mb-1">
-                    <h6 class="mb-0">Jason Doe</h6><small class="small font-weight-bold">25 Dec</small>
-                  </div>
-                  <p class="font-italic mb-0 text-small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore.</p>
+                          <div class="col-8 px-4 py-5 chat-box bg-white"></div>
+                      </div>
+                    </div>       
                 </div>
-              </div>
-            </a> -->
-
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-8 px-4 py-5 chat-box bg-white">
-        <!-- Sender Message
-        <div class="media w-50 mb-3">
-        <img src="https://bootstrapious.com/i/snippets/sn-chat/avatar.svg" alt="user" width="50" class="rounded-circle">
-          <div class="media-body ml-3">
-            <div class="bg-light rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-muted">Test which is a new approach all solutions</p>
-            </div>
-            <p class="small text-muted">12:00 PM | Aug 13</p>
-          </div>
-        </div>
-
-        Reciever Message
-        <div class="media w-50 ml-auto mb-3">
-          <div class="media-body">
-            <div class="bg-primary rounded py-2 px-3 mb-2">
-              <p class="text-small mb-0 text-white">Test which is a new approach to have all solutions</p>
-            </div>
-            <p class="small text-muted">12:00 PM | Aug 13</p>
-          </div>
-        </div> -->
-
-        
-    </div>
+                                                      </div>
 </div>

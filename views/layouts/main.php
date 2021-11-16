@@ -646,8 +646,7 @@ $first_part = $components[1];
         })
     })
 
-    if(window.location.pathname == '/products')
-    {
+    if(window.location.pathname == '/products'){
 
         $(".delbtn").click(function(e){
             e.preventDefault();
@@ -2199,7 +2198,7 @@ $first_part = $components[1];
             
         }
 
-        function getQuote(){
+        function getManufactureQuote(){
             $('#Quotetable tbody').empty();
             $.ajax({
                 url:'/quotes?gq=22',
@@ -2226,6 +2225,52 @@ $first_part = $components[1];
                                    ' </div>'+
                                 '</div>'+
                             '</a>'
+                        )
+                    })
+                    initailize_data_table();
+                }
+            })
+        }
+        function getNormalQuote(){
+            $('#Quotetable tbody').empty();
+            $.ajax({
+                url:'/quotes?nm=22',
+                type: 'POST',
+                success: function (result) {
+                    var data = JSON.parse(result)
+                    var date = '';
+                    var date2 = '';
+                    var ship = '';
+                    var currency = '';
+
+                    console.log(data);
+                    $.each(data,function (i, val) {
+                        date = new Date(val.timestamp)
+                        date2 = new Date(val.deliveryDate)
+
+                        if(val.productShipped === 'Yes'){
+                            ship = '<i class="badge badge-info">Abroad</i>'
+                        }else{
+                            ship = '<i class="badge badge-success">Domestic</i>'
+                        }
+                        if(val.productPriceCurr === 'USD'){
+                            currency = '$'
+                        }else{
+                            currency = 'N'
+                        }
+
+                        $('.Normal').append(
+                            '<tr>'+
+                            '<td>'+val.name+'</td>'+
+                            '<td>'+val.email+'</td>'+
+                            '<td>'+val.phone+'</td>'+
+                            '<td>'+val.address+','+val.city+','+val.country+'</td>'+
+                            '<td>'+val.productName+'</td>'+
+                            '<td>'+val.productQuantity+'</td>'+
+                            '<td>'+currency+''+val.productPrice+'</td>'+
+                            '<td>'+ship+'</td>'+
+                            '<td></td>'+
+                            '</tr>'
                         )
                     })
                     initailize_data_table();
@@ -2357,8 +2402,8 @@ $first_part = $components[1];
             })
         })
         
-        getQuote();
-
+        getManufactureQuote();
+        getNormalQuote();
     }
 </script>
 </body>
