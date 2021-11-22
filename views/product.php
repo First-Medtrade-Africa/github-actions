@@ -19,7 +19,7 @@ $status='';
         <div class="card-body">
             <div class="row">
                 <div class="col-md-12">
-                    <form  method="POST" action="" name="addProductForm" id="addProductForm" autocomplete="off" novalidate >
+                    <form  method="POST" action="" name="addProductForm" id="addProductForm" autocomplete="off" >
                         <div class="row">
                             <div class="col-md-6">
                                 <h3>Name, price and quantity</h3>

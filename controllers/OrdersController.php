@@ -71,7 +71,10 @@ class OrdersController extends Controller{
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([$id]);
         if ($stmt->rowCount() == 0) {
-            return false;
+            $sql="SELECT `orders`.*, `manufacturers`.`address`, `manufacturers`.`manufacturer_city`, `manufacturers`.`manufacturer`, `manufacturers`.`bank`, `manufacturers`.`acctName`, `manufacturers`.`acctNo`, `manufacturers`.`acctType`,users.name,users.phone FROM orders JOIN manufacturers,users WHERE orders.id =? AND manufacturers.id = orders.userid AND users.id = manufacturers.user_id";
+            $stmt = Application::$app->db->pdo->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } else {
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         }
@@ -83,14 +86,17 @@ class OrdersController extends Controller{
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([$id]);
         if ($stmt->rowCount() == 0) {
-            return false;
+            $sql="SELECT `orders`.*, `manufacturers`.`address`, `manufacturers`.`manufacturer_city`, `manufacturers`.`manufacturer`, `manufacturers`.`bank`, `manufacturers`.`acctName`, `manufacturers`.`acctNo`, `manufacturers`.`acctType`,`users`.`name`,`users`.`phone`,`products`.`productName`, `products`.`productPrice`,`products`.`minimumOrderQuantity`,`products`.`productPriceCurr`,`products`.`vendor` FROM orders JOIN manufacturers,users,products WHERE `orders`.orderId = ? AND `orders`.productid = `products`.id AND manufacturers.id = orders.userid AND users.id = manufacturers.user_id";
+            $stmt = Application::$app->db->pdo->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         } else {
             return $stmt->fetchAll(\PDO::FETCH_ASSOC);
         }
     }
     
     public function getVendor($id){
-        $sql ="SELECT vendors.user_id FROM `vendors` WHERE id=?";
+        $sql ="SELECT * FROM `vendors` WHERE id=?";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([$id]);
         if ($stmt->rowCount() == 0) {

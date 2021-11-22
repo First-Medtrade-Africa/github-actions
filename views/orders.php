@@ -187,7 +187,7 @@
                 <div class="modal-header"></div>
                 <div class="modal-body">
                     <!-- Main content -->
-                    <div class="invoice p-3 mb-3">
+                    <div class="invoice p-3 mb-3" id="invoiceContainer">
                         <!-- title row -->
                         <div class="row">
                             <div class="col-12">

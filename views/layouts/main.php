@@ -283,6 +283,8 @@ $first_part = $components[1];
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 <script>
     $(function () {
@@ -302,33 +304,7 @@ $first_part = $components[1];
             "autoWidth": false,
             "responsive": true,
         });
-        // $('#Quotetable').DataTable({
-        //     "paging": true,
-        //     "lengthChange": false,
-        //     "searching": false,
-        //     "ordering": true,
-        //     "info": true,
-        //     "autoWidth": false,
-        //     "responsive": true,
-        // });
-        // $('#sellertable').DataTable({
-        //     "paging": true,
-        //     "lengthChange": false,
-        //     "searching": true,
-        //     "ordering": true,
-        //     "info": true,
-        //     "autoWidth": false,
-        //     "responsive": true,
-        // })
-        // $('#buyertable').DataTable({
-        //     "paging": true,
-        //     "lengthChange": false,
-        //     "searching": false,
-        //     "ordering": true,
-        //     "info": true,
-        //     "autoWidth": false,
-        //     "responsive": true,
-        // })
+ 
         $('#dtBasicExample').DataTable();
         $('.dataTables_length').addClass('bs-select');
 
@@ -735,7 +711,7 @@ $first_part = $components[1];
                 type: 'POST',
                 success: function (result) {
                     var data = JSON.parse(result)
-                    console.log(data)
+                    console.log(result)
                     $.each(data, function (i, val) {
                         var status = val.orderStatus
                         var badge = ''
@@ -777,9 +753,9 @@ $first_part = $components[1];
                                     '<button type="button" class="btn btn-success btn-group-sm">Action</button>'+
                                     '<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-expanded="true"><span class="sr-only">Toggle Dropdown</span></button>'+
                                     '<ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton">'+
-                                        '<li><a class="dropdown-item more"  href="#" data-orderid="'+ val.id +'" data-vid="'+ val.vendorId+'" data-toggle="modal" data-target="#details">View Details</a></li>'+
-                                        '<li><a class="dropdown-item geninvoice" data-toggle="modal" data-id="'+val.id+'" data-vid="'+ val.vendorId+'"  data-target="#invoice" href="#">Generate Buyer Invoice</a></li>'+
-                                        '<li><a class="dropdown-item geninvoice" data-toggle="modal" data-id="'+val.id+'" data-vid="'+ val.vendorId+'"  data-target="#invoice" href="#">Generate Seller Invoice</a></li>'+
+                                        '<li><a class="dropdown-item more"  href="#" data-orderid="'+ val.id +'" data-vid="'+ val.userid+'" data-toggle="modal" data-target="#details">View Details</a></li>'+
+                                        '<li><a class="dropdown-item geninvoice" data-toggle="modal" data-id="'+val.id+'" data-vid="'+ val.userid+'"  data-target="#invoice" href="#">Generate Buyer Invoice</a></li>'+
+                                        '<li><a class="dropdown-item geninvoice" data-toggle="modal" data-id="'+val.id+'" data-vid="'+ val.userid+'"  data-target="#invoice" href="#">Generate Seller Invoice</a></li>'+
                                     '</ul>'+
                                 '</div>'+
 
@@ -986,7 +962,23 @@ $first_part = $components[1];
             });
 
         }
-
+        function generatePDF() {
+				// Choose the element that our invoice is rendered in.
+				const element = document.getElementById('invoiceContainer');
+				// Choose the element and save the PDF for our user.
+                var options = {
+                jsPDF: {
+                    format: 'a4'
+                },
+                html2canvas:  {  letterRendering: true, useCORS: true,     logging: true},
+                margin: 1,
+                image: {type: 'jpeg', quality: 1}
+                };
+                //with options
+                html2pdf().set(options).from(element).toPdf().save('myfile.pdf');
+                //without options
+                // html2PDF().from(element).toPdf().save('myfile.pdf');
+		}
         function getMarkuo(){}
 
         $(document.body).on('click','.more',function () {
@@ -995,17 +987,29 @@ $first_part = $components[1];
             var vid = $(this).data('vid');
             var userid =''
             var vendorid = ''
+            var storename =''
+            var Manucity =''
             console.log(id)
             $.ajax({
                 url:'/orders?pt='+id,
                 type:'POST',
                 success:function (result) {
+                    console.log(result)
                     var data = JSON.parse(result)
-                    console.log(data)
 
                     $.each(data,function (index,detail) {
                         userid = detail.userid
-                        vendorid = detail.user_id
+                        vendorid = detail.userid
+                        if(detail.storeName === undefined){
+                            storename = detail.manufacturer
+                        }else{
+                            storename = detail.storeName
+                        }
+                        if(detail.vendors_city === undefined){
+                            Manucity =detail.manufacturer_city
+                        }else{
+                            Manucity =detail.vendors_city
+                        }
                         $('#details .modal-body').append('' +
                             '<h2>To Details</h2>'+
                             '<ul class="list-group todetails">'+
@@ -1014,8 +1018,8 @@ $first_part = $components[1];
                             '</ul>'+
                             '<h2>From Details</h2>'+
                             '<ul class="list-group fromDetails">'+
-                            '<li class="list-group-item"><b class="text-uppercase fs-4">Store Name:</b>  '+ detail.storeName +'</li>'+
-                            '<li class="list-group-item"><b class="text-uppercase fs-4">Address:</b>  '+ detail.address + ','+detail.vendors_city+'</li>'+
+                            '<li class="list-group-item"><b class="text-uppercase fs-4">Store Name:</b>  '+ storename +'</li>'+
+                            '<li class="list-group-item"><b class="text-uppercase fs-4">Address:</b>  '+ detail.address + ','+Manucity+'</li>'+
                             '</ul>'+
                             '<h2>Bank Details</h2>'+
                             '<ul class="list-group ">'+
@@ -1092,8 +1096,8 @@ $first_part = $components[1];
                         type:'POST',
                         success:function(result){
                             var data = JSON.parse(result)
-                            var curr = ''
                             console.log(data)
+                            var curr = ''
                             $('#orderItems tbody').empty();
 
                             $.each(data,function (i,val) {
@@ -1185,8 +1189,7 @@ $first_part = $components[1];
         
         $(document.body).on('click','.generate_pdf', function (e) {
                 e.preventDefault();
-                demoFromHTML();
-                genPDF()
+                generatePDF();
 
         })
         getOrders();
