@@ -700,7 +700,40 @@ $first_part = $components[1];
                 }
             })
         })
+        $('.detailsBtn').click(function (e){
+            $('#ProductDetails tbody').empty();
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/products?details=' + id,
+                type: 'POST',
+                success: function (result) {
+                    console.log(result);
+                    var val = JSON.parse(result)   
+                    var location = '' 
+                    var seller = ''   
+                    if(val.vendor_type == "Retailer"){
+                        seller = val.storeName;
+                        location = val.vendors_city;
+                    }else{
+                        location = val.manufacturer_city;
+                        seller = val.manufacturer;
+                    }
 
+                    $('#ProductDetails tbody').append(
+                        '<tr>'+
+                            '<td>' + val.productName + '</td>' +
+                            '<td>' + val.productPrice + '</td>' +
+                            '<td>' + val.minimumOrderQuantity + '</td>' +
+                            '<td>' + val.productDiscount + '</td>' +
+                            '<td>' + seller + '</td>' +
+                            '<td>' + val.dateCreated + '</td>' +
+                            '<td>' + location + '</td>' +
+                        '</tr>'
+                    )   
+                }
+            })
+        })
     }
     if(window.location.pathname == '/orders'){
 
@@ -2027,7 +2060,7 @@ $first_part = $components[1];
                             '<td>'+val.markup_type+'</td>' +
                             '<td>'+val.markup_value+'</td>' +
                             '<td> <button class="btn btn-success btn-xs editmarkupbtn" id="" data-toggle="modal" data-id="' + val.markup_id + '"  data-target="#editMarkup">Edit</button></td>' +
-                            '')
+                            '</tr>')
                     })
                 }
             })
@@ -2058,8 +2091,8 @@ $first_part = $components[1];
                     $('.ex_id').val(data[0].id);
                     $('.buycurrency').val(data[0].currency);
                     $('.sellcurrency').val(data[0].x_currency);
-                    $('.inverserate').val(data[0].rate);
-                    $('.rate ').val(data[0].inverse_rate);
+                    $('.rate').val(data[0].rate);
+                    $('.inverserate').val(data[0].inverse_rate);
                 }
             })
         }
@@ -2099,7 +2132,7 @@ $first_part = $components[1];
                             '<td>'+val.rate+'</td>' +
                             '<td>'+val.inverse_rate+'</td>' +
                             '<td> <button class="btn btn-success btn-xs editexchangebtn" id="" data-toggle="modal" data-id="' + val.id + '"  data-target="#editexchange">Edit</button></td>' +
-                            '')
+                            '</tr>')
                     })
                 }
             })
@@ -2158,9 +2191,9 @@ $first_part = $components[1];
             return inverseVal;
         }
 
-        $('.inverserate').on('keyup',function () {
+        $('.rate').on('keyup',function () {
             let rate = $(this).val();
-            $('.rate').val(getInverseRate(rate));
+            $('.inverserate').val(getInverseRate(rate));
             console.log(getInverseRate(rate))
         })
 

@@ -21,7 +21,7 @@ class ProductController extends Controller
 
     protected function getProducts()
     {
-        $sql = "SELECT `products`.* ,`vendors`.`storeName`, `vendors`.`vendors_city`, `products_details`.* FROM products JOIN vendors JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`vendor` = `vendors`.`storeName` AND `products`.`id` =`products_details`.`product_id`";
+        $sql = "SELECT `products`.* ,`products_details`.* FROM products JOIN products_details WHERE `products`.`isDeleted`= 0 AND `products`.`id` =`products_details`.`product_id`";
         $statement = Application::$app->db->pdo->query($sql);
 
         if ($statement->rowCount() > 0){
@@ -29,6 +29,7 @@ class ProductController extends Controller
         }
         return $res ;
     }
+
     public function getSingleProduct($id)
     {
         $sql = "SELECT * FROM `products` JOIN `products_details` WHERE `products`.`id` = ? AND `products`.`id` = `products_details`.`product_id`";
@@ -36,6 +37,31 @@ class ProductController extends Controller
         $statement->execute([$id]);
         if ($statement->rowCount() > 0){
             return $statement->fetch(\PDO::FETCH_ASSOC);
+        }
+    }
+    public function getSingleProductId($id)
+    {
+        $sql = "SELECT * FROM `products` JOIN `products_details` WHERE `products`.`id` = ? AND `products`.`id` = `products_details`.`product_id`";
+        $statement = Application::$app->db->pdo->prepare($sql);
+        $statement->execute([$id]);
+        if ($statement->rowCount() > 0){
+            $data = $statement->fetch(\PDO::FETCH_ASSOC);
+
+            $type = $data['vendor_type'];
+            $sql="";
+            if($type == "Retailer"){
+                $sql = "SELECT `products`.* , `vendors`.`storeName`,`vendors`.`vendors_city` FROM `products` JOIN `vendors`, `products_details` WHERE `products`.`id` = ? AND `products`.`id` = `products_details`.`product_id` AND `products`.`vendor` = `vendors`.`storeName`";
+            }else{
+                $sql = "SELECT `products`.* , `manufacturers`.`manufacturer`, `manufacturers`.`manufacturer_city` FROM `products` JOIN `manufacturers`, `products_details` WHERE `products`.`id` = ? AND `products`.`id` = `products_details`.`product_id` AND `products`.`vendor` = `manufacturers`.`manufacturer`";
+            }
+            $statement = Application::$app->db->pdo->prepare($sql);
+            $statement->execute([$id]);
+            if ($statement->rowCount() > 0){
+                return $statement->fetch(\PDO::FETCH_ASSOC);
+            }else{
+                return false;
+            }
+                
         }
     }
 
@@ -344,7 +370,11 @@ class ProductController extends Controller
                 );
                 return $stat;
             }
-                
+            if(isset($_GET['details'])){
+                $id = $_GET['details'];
+                $data = $this->getSingleProductId($id);
+                return json_encode($data);
+            }
         }
         $product_id ='';
         if(isset($_GET['id'])) {

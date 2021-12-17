@@ -117,8 +117,8 @@ class MarkUpController extends Controller
                 $id = $_GET['exchange_id'];
                 $buy = strtoupper($_GET['ebuy']);
                 $sell =strtoupper($_GET['esell']);
-                $rate =$_GET['erate'];
-                $inverse =$_GET['einverse'];
+                $rate =$_GET['einverse'];
+                $inverse =$_GET['erate'];
                 $data = $this->UpdateExchange($id,$rate,$inverse,$buy,$sell);
                 return json_encode($data);
             }

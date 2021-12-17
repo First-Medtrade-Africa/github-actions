@@ -294,9 +294,9 @@ $status='';
                     <th>Price</th>
                     <th>M.O.Q</th>
                     <th>Discount</th>
-                    <th>Vendor Name</th>
+                    <!-- <th>Vendor Name</th> -->
                     <th>Date Created</th>
-                    <th>Location</th>
+                    <!-- <th>Location</th> -->
                     <th>Approved</th>
                     <th>Type</th>
                     <th>Action</th>
@@ -319,9 +319,9 @@ $status='';
                         <td><?php  echo $product['productPriceCurr'].' '.number_format($product['productPrice']) ;?></td>
                         <td><?php  echo $product['minimumOrderQuantity'];?></td>
                         <td> <?php echo $product['productDiscount'];?>%</td>
-                        <td><?php  echo  $product['storeName'];?></td>
+                        <!-- <td><?php  //echo  $product['storeName'];?></td> -->
                         <td><?php  echo $product['dateCreated'];?></td>
-                        <td><?php  echo $product['vendors_city'];?></td>
+                        <!-- <td><?php  //echo $product['vendors_city'];?></td> -->
                         
                         <td><?php echo $status; ?></td>
                         <td><?php echo $product['vendor_type'];?></td>
@@ -334,6 +334,7 @@ $status='';
                                         <li><a class="dropdown-item more"  href="/products?id=<?php echo $product['product_id']?>" >Edit</a></li>
                                         <li><a class="dropdown-item delbtn" data-id="<?= $product['product_id']?>" href="#">Delete</a></li>
                                         <li><a class="dropdown-item approvebtn" data-id="<?= $product['product_id']?>" href="#">Approve</a></li>
+                                        <li><a class="dropdown-item detailsBtn" data-id="<?= $product['product_id']?>" data-target="#ProductDetails" data-toggle="modal"   href="#">Details</a></li>
                                     </ul>
                             </div>
                         </td>
@@ -346,9 +347,9 @@ $status='';
                     <th>Price</th>
                     <th>M.O.Q</th>
                     <th>Discount</th>
-                    <th>Vendor Name</th>
+                    <!-- <th>Vendor Name</th> -->
                     <th>Date Created</th>
-                    <th>Location</th>
+                    <!-- <th>Location</th> -->
                     <th>Action</th>
                 </tr>
                 </tfoot>
@@ -356,3 +357,30 @@ $status='';
         </div>
     </div>
 <?php }?>
+<div class="row">
+    <div class="modal" id="ProductDetails">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+                <div class="modal-body">
+                    <table class="table" >
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>M.O.Q</th>
+                                <th>Discount</th>
+                                <th>M Name</th>
+                                <th>Date Created</th>
+                                <th>Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
