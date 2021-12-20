@@ -369,6 +369,7 @@ $first_part = $components[1];
          
         var text = $('#prodcategory').val();
         console.log(subcatid);
+        console.log(text);
         
         $.ajax({
             url: "/products?txt="+text,
@@ -624,6 +625,88 @@ $first_part = $components[1];
 
     if(window.location.pathname == '/products'){
 
+        $(".more").click(function(e){
+            e.preventDefault();
+           
+            console.log($(this).data('id'));
+            let id = $(this).data('id');
+            $.ajax({
+                url: '/products?getproductid='+id,
+                type: 'POST',
+                success: function (result) {
+                    var data = JSON.parse(result)
+                    console.log(data)
+                    $('input[name="prodId"]').val(data.product_id)
+                    $('input[name="prodName"]').val(data.productName)
+                    $('input[name="prodmoq"]').val(data.minimumOrderQuantity)
+                    $('input[name="prodprice"]').val(data.productPrice)
+                    var size = data.quantitySize;
+                    var currency = data.productPriceCurr;
+                    $('#qty').find("option[value='"+size+"']").attr("selected",true);
+                    $('#curr').find("option[value='"+currency+"']").attr("selected",true);
+
+                    $('input[name="priceDiscount"]').val(data.productDiscount)
+                    $('textarea[name="proddes"]').val(data.productDescription.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, ""))
+
+
+                    $('input[name="prodInStock"]').val(data.quantityInStock)
+                    $('#mqty').find("option[value='"+size+"']").attr("selected",true);
+
+                    var dimension = data.productDimension.split("x");
+
+                    var width = dimension[0]
+                    var height = dimension[1]
+                    var lenght = dimension[2]
+                    $('input[name="prodlenght"]').val(lenght)
+                    $('input[name="prodwidth"]').val(width)
+                    $('input[name="prodheight"]').val(height)
+
+                    if(data.productSize){
+                        var psize = data.productSize.split("-");
+                        var psizes = psize[1]
+                        psize = psize[0];
+                        console.log(psizes)
+                    }else{
+                        var psize = ''
+                        var psizes = ''
+                    }
+
+
+                    $('#prodSized').find("option[value='"+psize+"']").attr("selected",true);
+                    $('input[name="prodweight"]').val(data.productWeight.replace ( /[^0-9]/g, '' ))
+                    $('input[name="prodcolor"]').val(data.productColor)
+                    $('input[name="prodsize"]').val(psizes)
+
+
+                    // $('input[name="prodSizedcat"]').val(data.quantitySize)
+
+                    $('input[name="prodbatch"]').val(data.productModelNumber)
+                    $('#prodshipped').find("option[value='"+data.productShipped+"']").attr("selected",true);
+                    $('input[name="productShippedCountry"]').val(data.productShippedCountry)
+                    $('input[name="productShippedCity"]').val(data.productShippedCity)
+                    $('input[name="productShippedPostal"]').val(data.productShippedPostal)
+                    $('input[name="productShippedAddress"]').val(data.productShippedAddress)
+                    $('input[name="productShippedHSC"]').val(data.productShippedHSC)
+                    $('input[name="prodvid"]').val(data.productVideo)
+                    $('input[name="prodbrand"]').val(data.productBrand)
+                    $('input[name="prodcountry"]').val(data.productionCountry)
+                    $('textarea[name="intheBox"]').val(data.intheBox.replace(/<\/?[a-z][a-z0-9]*[^<>]*>/ig, ""))
+
+                    $('#prodcategory').find("option[value='"+data.productCategory+"']").attr("selected",true);
+                    getsubcat(data.productCategory,data.productSubCategory)
+
+                    // $('#productSubCategory').find("option[value='"+data.productSubCategory+"']").attr("selected",true);
+                    // $('input[name="prodcategory"]').val(data.productCategory)
+                    // $('input[name="productSubCategory"]').val(data.quantitySize)
+                    
+                    // $('input[name="prodmanu"]').val(data.quantitySize)
+                    // $('input[name="prodexp"]').val(data.quantitySize)
+                    console.log(data.productWeight.replace ( /[^0-9]/g, '' ));
+                }
+            })
+        })
+           
+    
         $(".delbtn").click(function(e){
             e.preventDefault();
             Swal.fire({
@@ -690,13 +773,35 @@ $first_part = $components[1];
 
         $('#addProductForm').submit(function(e){
             e.preventDefault();
-            var data = $(this).serialize();
-            console.log(data);
-            $.ajax({
-                url: '/products?'+data,
-                type: 'POST',
-                success: function (result) {
-                    console.log(result);
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You are About to Update this Product",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Update Product!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var data = $(this).serialize();
+                    console.log(data);
+                    $.ajax({
+                        url: '/products?'+data,
+                        type: 'POST',
+                        success: function (result) {
+                            console.log(result);
+                            Swal.fire(
+                                'Product Updated!',
+                                'Product has Been Updated Successfully',
+                                'success'
+                            )
+                            setTimeout(function () {
+                                // Do something after 5 seconds
+                                window.location.reload();
+                                return false;
+                            }, 2000);
+                        }
+                    })
                 }
             })
         })
@@ -734,6 +839,27 @@ $first_part = $components[1];
                 }
             })
         })
+        function getsubcat(id,subcatid){
+            $.ajax({
+            url: "/products?txt="+id,
+            type: "POST",
+            success: function (result) {
+            
+                console.log(result);
+                var data = JSON.parse(result);
+                console.log(data);
+                
+                $.each(data,function( index, value ) {
+                    var sel = (subcatid === value.id) ? "selected" : " ";
+                    $('#productSubCategory').append('<option value="'+ value.id +'" '+ sel +'>'+value.subCategories +'</option>');
+    
+                });
+                // $('#productSubCategory').find("option[value='"+id+"']").attr("selected",true);
+
+            }
+        })
+        }
+        
     }
     if(window.location.pathname == '/orders'){
 

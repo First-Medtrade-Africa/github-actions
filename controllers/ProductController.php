@@ -98,65 +98,79 @@ class ProductController extends Controller
         }
     }
     
-    public function updateProduct($productName, $productPriceCurr, $productCategory, $productSubCategory, $productDiscount, $productPrice, $minimumOrderQuantity, $productSize, $productColor, $productWeight, $productModelNumber, $productDescription, $intheBox, $productShipped, $productDimension, $productShippedAddress, $productShippedCity, $productShippedPostal, $productShippedCountry, $productShippedHSC, $productId,$productInStock,$productVideo,$productionCountry,$productBrand,$productUnit){
+    public function updateProduct(
+    $productname,
+    $productId,
+    $productBrand,
+    $productCatId,
+    $intheBox,
+    $productSubCatId,
+    $productColor,
+    $productDescription,
+    $productManufacture,
+    $productRating,
+    $productmodelNo,
+    $productWeight,
+    $productShipped,
+    $productPrice,
+    $productPriceCurr,
+    $productionCountry,
+    $productOrderQuantity,
+    $productVideo,
+    $productInStock,
+    $productUnit,
+    $productSize,
+    $prodDisc,
+    $productHeight ,
+    $productWidth ,
+    $productLength ,
+    $productShippedAddress,
+    $productShippedCity,
+    $productShippedPostal,
+    $productShippedCountry,
+    $productShippedHSC,
+    $productDimension ){
        
-        $sql = "UPDATE `products` SET `products`.`productName`=?,    `products`.`productPrice`=? `products`.`productPriceCurr`=? `products`.`productDiscount`=? `products`.`minimumOrderQuantity`? `products`.`quantityInStock`? `products`.`quantitySize`=? `products`.`productCategory`=? `products`.`productSubCategory`=? `products`.`productBrand`=? WHERE `products`.`id`=?";
+        $sql = "UPDATE `products` SET `productName`=?,`productPrice`=?, `productPriceCurr`=?, `productDiscount`=?, `minimumOrderQuantity`=?, `quantityInStock`=?, `quantitySize`=?, `productCategory`=?, `productSubCategory`=?, `productBrand`=? WHERE `products`.`id`=?";
+        // $sql = "UPDATE `products` SET `productName` = ? WHERE `products`.`id`=?";
         $stmt = Application::$app->db->pdo->prepare($sql);
         $stmt->execute([
-            $productName, 
-            $productPrice, 
-            $productPriceCurr, 
-            $productDiscount, 
-            $minimumOrderQuantity,
-            $productInStock,
-            $productUnit,
-            $productCategory, 
-            $productSubCategory,  
-            $productBrand,
-            $productId 
+            $productname,
+            $productPrice,
+            $productPriceCurr,
+            $prodDisc,
+            $productOrderQuantity,
+            $productInStock ,
+            $productUnit ,
+            $productCatId,
+            $productSubCatId ,
+            $productBrand ,
+            $productId
+            ]);
+
+        $update = "UPDATE `products_details` SET `productDescription`= ?,`intheBox`= ?,`productSize`= ?,`productWeight`= ?,`productColor`= ?,`productModelNumber`= ?,`productionCountry`= ?,`productShipped`=?,`productDimension`= ?,`productShippedAddress`=?,`productShippedCity`= ?,`productShippedPostal`=?,`productShippedCountry`= ?,`productShippedHSC`=  ?,`productManufacture`= ? WHERE `products_details`.`product_id`= ? ";
+            // $update = "UPDATE `products_details` SET `productDescription`= ?, `intheBox`= ?, `productSize`= ? WHERE `products_details`.`product_id`= ?";
+        $stmt2 = Application::$app->db->pdo->prepare($update);
+        $stmt2->execute([
+            $productDescription, 
+            $intheBox,
+            $productSize,  
+            $productWeight, 
+            $productColor, 
+            $productmodelNo, 
+            $productionCountry, 
+            $productShipped, 
+            $productDimension, 
+            $productShippedAddress, 
+            $productShippedCity, 
+            $productShippedPostal, 
+            $productShippedCountry, 
+            $productShippedHSC,
+            $productManufacture,
+            $productId
         ]);
-        if($stmt){
-            // $update = "UPDATE `products_details` SET 
-            //                     `productDescription`= ?,
-            //                     `intheBox`= ?,
-            //                     `productSize`= ?,
-            //                     `productWeight`= ,?
-            //                     `productColor`= ?,
-            //                     `productModelNumber`= ?,
-            //                     `productionCountry`= ?,
-            //                     `productShipped`=?,
-            //                     `productDimension`= ?,
-            //                     `productShippedAddress`=?,
-            //                     `productShippedCity`= ?,
-            //                     `productShippedPostal`=?,
-            //                     `productShippedCountry`= ?,
-            //                     `productShippedHSC`=  ?,
-            //                     `productManufacture`= ?,
-            //                      WHERE `product_id`= ?,";
-            // $stmt2 = Application::$app->db->pdo->prepare($update);
-            // $stmt2->execute([
-            //     $productDescription, 
-            //     $intheBox,
-            //     $productSize,  
-            //     $productWeight, 
-            //     $productColor, 
-            //     $productModelNumber, 
-            //     $productionCountry, 
-            //     $productShipped, 
-            //     $productDimension, 
-            //     $productShippedAddress, 
-            //     $productShippedCity, 
-            //     $productShippedPostal, 
-            //     $productShippedCountry, 
-            //     $productShippedHSC,
-            //     $productManufacture,
-            //     $productId
-            // ]);
-            return $stmt ;
-        }else{
-            return $stmt ;
-        }
-       
+            
+        return $stmt2;
     }
 
     public function getCountries($txt){
@@ -223,7 +237,7 @@ class ProductController extends Controller
         if ($request->getMethod() === 'post'){
 
             if(isset($_GET['txt'])){
-                $subCat = $this->getSubCategories($_GET['txt']) ?? '';
+                $subCat = $this->getSubCategories($_GET['txt']);
                 return json_encode($subCat);
             }
             
@@ -283,14 +297,13 @@ class ProductController extends Controller
                 $productVideo           =         $_GET['prodvid'];
                 $productInStock         =         $_GET['prodInStock'];
                 $productUnit            =         $_GET['qty'] ;
-                $productSize            =         $_GET['prodSizedcat'] ?? ''.'-'.$_GET['prodsize'] ?? '';
+                $productSize            =         $_GET['prodSizedcat'].'-'.$_GET['prodsize'];
                 $prodDisc               =         $_GET['priceDiscount'];
-                 if($productShipped == 'Yes'){
+                if($productShipped == 'Yes'){
                     $markup = 20;
                     $productHeight =  $_GET['prodheight'];
                     $productWidth =  $_GET['prodwidth'];
                     $productLength =  $_GET['prodlenght'] ;
-    
                     $productDimension = $productLength.'x'.$productWidth.'x'.$productHeight;
     
                     $productShippedAddress  =  $_GET['productShippedAddress'];
@@ -340,39 +353,47 @@ class ProductController extends Controller
                 // ]);
                 // return json_encode($data);
                 $stat = $this->updateProduct(
-                    $productName,
-                    $productPriceCurr,
-                    $productCatId,
-                    $productSubCatId,
-                    $prodDisc,
-                    $productPrice,
-                    $markup,
-                    $productOrderQuantity,
-                    $productSize,
-                    $productColor,
-                    $productWeight,
-                    $productmodelNo,
-                    $productDescription,
-                    $intheBox,
-                    $productShipped,
-                    $productDimension, 
-                    $productShippedAddress, 
-                    $productShippedCity, 
-                    $productShippedPostal, 
-                    $productShippedCountry, 
-                    $productShippedHSC, 
-                    $productId,
-                    $productInStock,
-                    $productVideo,
-                    $productionCountry,
-                    $productBrand,
-                    $productUnit  
-                );
+                $productName,
+                $productId,
+                $productBrand,    
+                $productCatId         ,
+                $intheBox             ,
+                $productSubCatId      ,
+                $productColor         ,
+                $productDescription   ,
+                $productManufacture   ,
+                $productRating        ,
+                $productmodelNo       ,
+                $productWeight        ,
+                $productShipped       ,
+                $productPrice         ,
+                $productPriceCurr     ,
+                $productionCountry    ,
+                $productOrderQuantity ,
+                $productVideo,
+                $productInStock,
+                $productUnit,
+                $productSize,
+                $prodDisc,
+                $productHeight ,
+                $productWidth ,
+                $productLength ,
+                $productShippedAddress  ,
+                $productShippedCity     ,
+                $productShippedPostal   ,
+                $productShippedCountry  ,
+                $productShippedHSC      ,
+                $productDimension );
                 return $stat;
             }
             if(isset($_GET['details'])){
                 $id = $_GET['details'];
                 $data = $this->getSingleProductId($id);
+                return json_encode($data);
+            }
+            if(isset($_GET['getproductid'])){
+                $id = $_GET['getproductid'];
+                $data = $this->getSingleProduct($id);
                 return json_encode($data);
             }
         }
