@@ -10,7 +10,7 @@ class Product
 
     public function getProducts()
     {
-        $sql = "SELECT products.*,vendors.* FROM products JOIN vendors WHERE `products`.`vendorId` = `vendors`.`id`";
+        $sql = "SELECT products.*,vendors.* FROM products JOIN vendors WHERE `products`.`vendor` = `vendors`.`storeName`";
         $statement = Application::$app->db->pdo->query($sql);
 
         if ($statement->rowCount() > 0){
