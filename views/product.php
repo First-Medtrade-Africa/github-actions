@@ -13,7 +13,7 @@
                     <th>Price</th>
                     <th>M.O.Q</th>
                     <th>Discount</th>
-                    <!-- <th>Vendor Name</th> -->
+                    <th>Vendor Name</th>
                     <th>Date Created</th>
                     <!-- <th>Location</th> -->
                     <th>Approved</th>
@@ -38,7 +38,7 @@
                         <td><?php  echo $product['productPriceCurr'].' '.number_format($product['productPrice']) ;?></td>
                         <td><?php  echo $product['minimumOrderQuantity'];?></td>
                         <td> <?php echo $product['productDiscount'];?>%</td>
-                        <!-- <td><?php  //echo  $product['storeName'];?></td> -->
+                        <td><a href=""><?php  echo  $product['vendor'];?></a></td>
                         <td><?php  echo $product['dateCreated'];?></td>
                         <!-- <td><?php  //echo $product['vendors_city'];?></td> -->
                         
